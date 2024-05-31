@@ -1,9 +1,9 @@
 <form class="{{cssClass}} flexcol" autocomplete="off">
   <div class="main-grid">
-    {{> "systems/openlegend/templates/actor/parts/actor-details.html"}}
-    {{> "systems/openlegend/templates/actor/parts/actor-attributes.html"}}
-    {{> "systems/openlegend/templates/actor/parts/actor-defense.html"}}
-    {{> "systems/openlegend/templates/actor/parts/actor-actions.html"}}
+    {{> "systems/chromaverse/templates/actor/parts/actor-details.html"}}
+    {{> "systems/chromaverse/templates/actor/parts/actor-traits.html"}}
+    {{> "systems/chromaverse/templates/actor/parts/actor-defense.html"}}
+    {{> "systems/chromaverse/templates/actor/parts/actor-actions.html"}}
     <div class="character">
       <div class="gear">
         <div class="title">
@@ -14,13 +14,13 @@
         </div>
         {{#each gear as |item|}}
           {{#ifeq item.type 'weapon'}}
-            {{> "systems/openlegend/templates/actor/parts/gear-weapon.html" weapon=item}}
+            {{> "systems/chromaverse/templates/actor/parts/gear-weapon.html" weapon=item}}
           {{/ifeq}}
           {{#ifeq item.type 'armor'}}
-            {{> "systems/openlegend/templates/actor/parts/gear-armor.html" armor=item}}
+            {{> "systems/chromaverse/templates/actor/parts/gear-armor.html" armor=item}}
           {{/ifeq}}
           {{#ifeq item.type 'generic'}}
-            {{> "systems/openlegend/templates/actor/parts/gear-generic.html" item=item}}
+            {{> "systems/chromaverse/templates/actor/parts/gear-generic.html" item=item}}
           {{/ifeq}}
         {{/each}}
       </div>
@@ -30,26 +30,30 @@
           <span class="button add-asset clickable" data-type="feat"><i class="fas fa-plus"></i> Feat</span>
         </div>
         {{#each feats as |item|}}
-          {{> "systems/openlegend/templates/actor/parts/gear-feat.html" feat=item}}
+          {{> "systems/chromaverse/templates/actor/parts/gear-feat.html" feat=item}}
         {{/each}}
       </div>
-      <div class="perks">
+      <div class="virtues">
         <div class="title">
-          Perks
-          <span class="button add-asset clickable" data-type="perk"><i class="fas fa-plus"></i> Perk</span>
+          Virtues
+          <span class="button add-asset clickable" data-type="virtue"><i class="fas fa-plus"></i> Virtue</span>
         </div>
-        {{#each perks as |item|}}
-          {{> "systems/openlegend/templates/actor/parts/gear-perkflaw.html" perkflaw=item}}
+        {{#each virtues as |item|}}
+          {{> "systems/chromaverse/templates/actor/parts/gear-virtue.html" virtue=item}}
         {{/each}}
       </div>
-      <div class="flaws">
+      <div class="personality">
         <div class="title">
-          Flaws
-          <span class="button add-asset clickable" data-type="flaw"><i class="fas fa-plus"></i> Flaw</span>
+          Personality
         </div>
-        {{#each flaws as |item|}}
-          {{> "systems/openlegend/templates/actor/parts/gear-perkflaw.html" perkflaw=item}}
-        {{/each}}
+        <label>Attitude:</label>
+        <textarea name="system.personality.attitude" placeholder="">{{system.personality.attitude}}</textarea>
+        <label>Beliefs:</label>
+        <textarea name="system.personality.beliefs" placeholder="">{{system.personality.beliefs}}</textarea>
+        <label>Connections:</label>
+        <textarea name="system.personality.connections" placeholder="">{{system.personality.connections}}</textarea>
+        <label>Drive:</label>
+        <textarea name="system.personality.drive" placeholder="">{{system.personality.drive}}</textarea>
       </div>
     </div>
     <div class="pc-notes">

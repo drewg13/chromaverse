@@ -1,7 +1,7 @@
 {
-  "id": "openlegend",
-  "title": "Open Legend RPG",
-  "description": "The Open Legend RPG system for FoundryVTT!",
+  "id": "chromaverse",
+  "title": "Chromaverse",
+  "description": "The Chromaverse system for FoundryVTT!",
   "authors": [
     {
       "name": "Andrew Garinger",
@@ -20,10 +20,10 @@
   },
   "scripts": [],
   "esmodules": [
-    "module/openlegend.js"
+    "module/chromaverse.js"
   ],
   "styles": [
-    "css/openlegend.css"
+    "css/chromaverse.css"
   ],
   "languages": [
     {
@@ -36,7 +36,7 @@
     {
       "name": "banes",
       "label": "Banes",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/banes",
       "type": "Item",
       "private": false
@@ -44,7 +44,7 @@
     {
       "name": "basic",
       "label": "Basic",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/basic",
       "type": "Item",
       "private": false
@@ -52,7 +52,7 @@
     {
       "name": "boons",
       "label": "Boons",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/boons",
       "type": "Item",
       "private": false
@@ -60,39 +60,31 @@
     {
       "name": "feats",
       "label": "Feats",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/feats",
-      "type": "Item",
-      "private": false
-    },
-    {
-      "name": "flaws",
-      "label": "Flaws",
-      "system": "openlegend",
-      "path": "./packs/flaws",
       "type": "Item",
       "private": false
     },
     {
       "name": "gm-feats",
       "label": "GM-Feats",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/gm-feats",
       "type": "Item",
       "private": false
     },
     {
-      "name": "perks",
-      "label": "Perks",
-      "system": "openlegend",
-      "path": "./packs/perks",
+      "name": "virtues",
+      "label": "Virtues",
+      "system": "chromaverse",
+      "path": "./packs/virtues",
       "type": "Item",
       "private": false
     },
     {
       "name": "rules",
       "label": "Rules",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/rules",
       "type": "JournalEntry",
       "private": false
@@ -100,7 +92,7 @@
     {
       "name": "weapons",
       "label": "Weapons",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/weapons",
       "type": "Item",
       "private": false
@@ -108,7 +100,7 @@
     {
       "name": "armor",
       "label": "Armor",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/armor",
       "type": "Item",
       "private": false
@@ -116,7 +108,7 @@
     {
       "name": "gm-screen",
       "label": "GM-Screen",
-      "system": "openlegend",
+      "system": "chromaverse",
       "path": "./packs/gm-screen",
       "type": "JournalEntry",
       "private": false
@@ -126,12 +118,14 @@
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
   "protected": false,
-  "gridDistance": 5,
-  "gridUnits": "ft",
-  "primaryTokenAttribute": "defense.hp",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
+  "primaryTokenAttribute": "defense.resolve",
   "flags": {
     "hotReload": {
-      "extensions": ["css", "html", "json", "js"],
+      "extensions": ["css", "html", "json", "js", "hbs"],
       "paths": ["css", "lang", "module", "templates"]
     }
   }

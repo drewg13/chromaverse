@@ -10,7 +10,7 @@ export class olNPCActorSheet extends olActorSheet {
   /** @override */
   static get defaultOptions() {
     const options = foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["openlegend", "sheet", "actor", "npc"],
+      classes: ["chromaverse", "sheet", "actor", "npc"],
       width: 750,
     });
     return options;
@@ -18,7 +18,7 @@ export class olNPCActorSheet extends olActorSheet {
 
   /** @override */
   get template() {
-    return "systems/openlegend/templates/actor/npc-sheet.html";
+    return "systems/chromaverse/templates/actor/npc-sheet.html";
   }
 
 }

@@ -7,7 +7,7 @@ export class olItemSheet extends ItemSheet {
   /** @override */
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["openlegend", "sheet", "item"],
+      classes: ["chromaverse", "sheet", "item"],
       width: 520,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
@@ -16,7 +16,7 @@ export class olItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    const path = "systems/openlegend/templates/item";
+    const path = "systems/chromaverse/templates/item";
     return `${path}/${this.item.type}.html`;
   }
 
@@ -51,8 +51,8 @@ export class olItemSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
     html.find(".add-attack").click(async () => {
-      const template = "systems/openlegend/templates/item/parts/attack-target.html";
-      const data = { 'attack': {}, 'attributes': this.object.system.attributes };
+      const template = "systems/chromaverse/templates/item/parts/attack-target.html";
+      const data = { 'attack': {}, 'traits': this.object.system.traits };
       const new_attack = await renderTemplate(template, data);
       html.find(".attack-list").append(new_attack);
     });
@@ -64,16 +64,16 @@ export class olItemSheet extends ItemSheet {
         btn.html("Save");
       else {
         let data = {}
-        html.find(".attr-checkbox").each((i, obj) => {
-          data['system.attributes.' + obj.dataset.attr] = obj.checked;
+        html.find(".trait-checkbox").each((i, obj) => {
+          data['system.traits.' + obj.dataset.trait] = obj.checked;
         });
 
         if (this.object.system.attacks) {
           const attacks = []
           html.find(".action-attack").each((i, attack) => {
-            const attr = $(attack).find('.attack-attribute').val();
+            const trait = $(attack).find('.attack-trait').val();
             const target = $(attack).find('.attack-target').val();
-            attacks.push({ "attribute": attr, "target": target });
+            attacks.push({ "trait": trait, "target": target });
           });
           data['system.attacks'] = attacks;
         }
@@ -106,6 +106,6 @@ export class olItemSheet extends ItemSheet {
 
   resizeInput() {
     console.log($(this));
-    $(this).attr('size', $(this).val().length);
+    $(this).trait('size', $(this).val().length);
   }
 }

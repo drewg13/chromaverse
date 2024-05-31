@@ -9,20 +9,22 @@
         <input name="system.player" type="text" value="{{system.player}}" placeholder="" />
     </div>
     <div class="details-description text-input">
-        <label>Description:</label>
-        <input name="system.description" type="text" value="{{system.description}}" placeholder="" />
+        <label>Archetype:</label>
+        <input name="system.archetype" type="text" value="{{system.archetype}}" placeholder="" />
     </div>
     <div class="details-level text-input">
         <label>Level:</label>
         <label>{{system.level}}</label>
     </div>
-    <div class="details-xp text-input">
-        <label>XP:</label>
-        <input name="system.xp" type="number" value="{{system.xp}}" placeholder="0" />
+    <div class="details-chroma-points text-input">
+        <span>
+        <label>Chroma Points:
+        {{system.trackers.chroma.spent}} / <input name="system.trackers.chroma.points" type="number" value="{{system.trackers.chroma.points}}" placeholder="0" /></label>
+        </span>
     </div>
     <div class="details-wealth text-input">
-        <label>WL:</label>
-        <input name="system.wl" type="number" value="{{system.wl}}" placeholder="2" />
+        <label>Funds:</label>
+        <input name="system.funds" type="number" value="{{system.funds}}" placeholder="2" />
     </div>
     <div class="details-roll-initiative text-input">
         <label class="forceful">
@@ -32,17 +34,17 @@
         </label>
         <input name="system.initiative_mod" type="number" value="{{system.initiative_mod}}" placeholder="0" />
     </div>
-    <div class="details-attr-points text-input">
-        <label>Attr:</label>
-        <label>{{system.trackers.attr.spent}}/{{system.trackers.attr.points}}</label>
+    <div class="details-trait-points text-input">
+        <label>Trait Points:</label>
+        <label>{{system.trackers.traits.spent}} / {{system.trackers.traits.points}}</label>
     </div>
     <div class="details-feat-points text-input">
-        <label>Feats:</label>
-        <label>{{system.trackers.feats.spent}}/{{system.trackers.feats.points}}</label>
+        <label>Feat Points:</label>
+        <label>{{system.trackers.feats.spent}} / {{system.trackers.feats.points}}</label>
     </div>
     <div class="details-legend-points text-input">
-        <label>LP:</label>
-        <input name="system.lp" type="number" value="{{system.lp}}" placeholder="1" />
+        <label>Vigor:</label>
+        <input name="system.vigor" type="number" value="{{system.vigor}}" placeholder="1" />
     </div>
     <div class="details-speed text-input">
         <label>Speed:</label>

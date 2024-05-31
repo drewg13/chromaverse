@@ -38,72 +38,90 @@ export class olActor extends Actor {
   _prepareCharacterData(actorData) {
     const data = actorData.system;
     // Calculate level
-    data.level = Math.floor(data.xp/3) + 1;
+    data.level = Math.floor((data.trackers.chroma.points - 15) / 3 ) + 1;
 
     let trackers = data.trackers;
-    let attributes = data.attributes;
-    trackers.attr.spent = 0;
-    trackers.attr.points = 40 + data.xp*3;
-    data.heroMusterCode = "";
-    // Loop through attribute scores, and add their dice to our sheet output.
-    for (let [attr_group_name, attr_group] of Object.entries(attributes)) {
-      for (let [attr_name, attr] of Object.entries(attr_group)) {
-        attr.modified_score = attr.score + (attr.bonus ? attr.bonus : 0)
-        data.heroMusterCode = data.heroMusterCode + String( attr.modified_score );
-        attr.bonus_class = (attr.bonus ? (attr.bonus > 0 ? 'upgraded' : 'downgraded') : '');
-        attr.bonus_str = (attr.bonus && attr.bonus !== 0 ? (attr.bonus > 0 ? '+'+attr.bonus : attr.bonus) : '');
-        attr.dice = this.getDieForAttrScore(attr.modified_score);
-        trackers.attr.spent += (attr.score*attr.score + attr.score)/2;
+    let traits = data.traits;
+    let chroma = data.chroma;
+    trackers.traits.spent = 0;
+    trackers.traits.points = 40 + ((data.trackers.chroma.points - 15) * 3);
+
+    // Loop through trait scores, and add their dice to our sheet output.
+    for (let [trait_group_name, trait_group] of Object.entries(traits)) {
+      for (let [trait_name, trait] of Object.entries(trait_group)) {
+        trait.modified_score = trait.score + (trait.bonus ? trait.bonus : 0)
+        trait.bonus_class = (trait.bonus ? (trait.bonus > 0 ? 'upgraded' : 'downgraded') : '');
+        trait.bonus_str = (trait.bonus && trait.bonus !== 0 ? (trait.bonus > 0 ? '+'+trait.bonus : trait.bonus) : '');
+        trait.dice = this.getDieForTraitScore(trait.modified_score);
+        trackers.traits.spent += (trait.score*trait.score + trait.score)/2;
       }
     }
 
-    // Set max hp based on: 2 * (Fortitude + Will + Presence) + 10 (handle attr substitution)
-    // Cap current lethal between 0 and max
-    const hp = data.defense.hp;
-    const hp_form1 = this.getAttrForName(data.attributes, hp.formula[0].active).modified_score;
-    const hp_form2 = this.getAttrForName(data.attributes, hp.formula[1].active).modified_score;
-    const hp_form3 = this.getAttrForName(data.attributes, hp.formula[2].active).modified_score;
-    const fort = data.attributes.physical.fortitude.modified_score;
-    hp.hint = 2 * (hp_form1 + hp_form2 + hp_form3) + 10;
-    hp.hint_str = `2 * (${hp.formula[0].active} + ${hp.formula[1].active} + ${hp.formula[2].active}) + 10 + feats= ${hp.hint}`
-    hp.max = hp.hint + hp.other + hp.feat;
-    hp.lethal = Math.min(Math.max(hp.lethal, 0), hp.max);
-    hp.value = Math.min(Math.max(hp.value, hp.min), hp.max - hp.lethal);
+    // Loop through chroma scores, and add their dice to our sheet output.
+    for (let [chroma_group_name, chroma_group] of Object.entries(chroma)) {
+      for (let [chroma_name, chroma] of Object.entries(chroma_group)) {
+        chroma.modified_score = chroma.score + (chroma.bonus ? chroma.bonus : 0)
+        chroma.bonus_class = (chroma.bonus ? (chroma.bonus > 0 ? 'upgraded' : 'downgraded') : '');
+        chroma.bonus_str = (chroma.bonus && chroma.bonus !== 0 ? (chroma.bonus > 0 ? '+'+chroma.bonus : chroma.bonus) : '');
+        chroma.dice = this.getDieForTraitScore(chroma.modified_score);
+        trackers.chroma.spent += this.getCostForChromaScore(chroma.score);
+      }
+    }
 
-    // Set guard to 10 + Agility + Might + Armor + Other (handle attr substitution)
-    const guard = data.defense.guard;
-    const guard_form1 = this.getAttrForName(data.attributes, guard.formula[0].active).modified_score;
-    const guard_form2 = this.getAttrForName(data.attributes, guard.formula[1].active).modified_score;
-    guard.formula[0].score = guard_form1;
-    guard.formula[1].score = guard_form2;
+    const endur = data.traits.physical.endurance.modified_score;
     let armor= 0;
     actorData.items.forEach(item => {
       if (item.type === 'armor') {
-        if (item.system.equipped && fort >= item.system.req_fort)
+        if (item.system.equipped && endur >= item.system.req_fort)
           armor += item.system.defense;
       }
     });
-    guard.armor = Math.max( armor,  (guard.armorBonus ? guard.armorBonus : 0) );
-    guard.guard = Math.max(0, 10 + guard_form1 + guard_form2 + guard.armor + guard.other);
-    guard.hint_str = `10 + ${guard.formula[0].active} + ${guard.formula[1].active} + armor + other + feats = ${guard.guard}`;
 
-    // Set toughness to 10 + Fortitude + Will + Other (handle attr substitution)
-    const tough = data.defense.toughness;
-    const tough_form1 = this.getAttrForName(data.attributes, tough.formula[0].active).modified_score;
-    const tough_form2 = this.getAttrForName(data.attributes, tough.formula[1].active).modified_score;
-    tough.formula[0].score = tough_form1;
-    tough.formula[1].score = tough_form2;
-    tough.toughness = Math.max(0, 10 + tough_form1 + tough_form2 + tough.other + (tough.bonus ? tough.bonus : 0) );
-    tough.hint_str = `10 + ${tough.formula[0].active} + ${tough.formula[1].active} + other + feats = ${tough.toughness}`;
-
-    // Set resolve to 10 + Presence + Will + Other (handle attr substitution)
+    // Set max hp based on: 2 * (Endurance + Volition + Presence) + 10 (handle trait substitution)
+    // Cap current lethal between 0 and max
     const resolve = data.defense.resolve;
-    const resolve_form1 = this.getAttrForName(data.attributes, resolve.formula[0].active).modified_score;
-    const resolve_form2 = this.getAttrForName(data.attributes, resolve.formula[1].active).modified_score;
-    resolve.formula[0].score = resolve_form1;
-    resolve.formula[1].score = resolve_form2;
-    resolve.resolve = Math.max(0, 10 + resolve_form1 + resolve_form2 + resolve.other + (resolve.bonus ? resolve.bonus : 0) );
-    resolve.hint_str = `10 + ${resolve.formula[0].active} + ${resolve.formula[1].active} + other + feats = ${resolve.resolve}`;
+    resolve.bonus = data.defense.resolve.bonus ? data.defense.resolve.bonus : 0;
+    const resolve_form1 = this.getTraitForName(data.traits, resolve.formula[0].active).modified_score;
+    const resolve_form2 = this.getTraitForName(data.traits, resolve.formula[1].active).modified_score;
+    const resolve_form3 = this.getTraitForName(data.traits, resolve.formula[2].active).modified_score;
+    resolve.hint = 2 * (resolve_form1 + resolve_form2 + resolve_form3) + 10 + (resolve.bonus ? resolve.bonus : 0);
+    resolve.hint_str = `2 * (${resolve.formula[0].active} + ${resolve.formula[1].active} + ${resolve.formula[2].active}) + 10 + feats = ${resolve.hint}`
+    resolve.max = resolve.hint + resolve.other + (resolve.bonus ? resolve.bonus : 0);
+    resolve.lethal = Math.min(Math.max(resolve.lethal, 0), resolve.max);
+    resolve.value = Math.min(Math.max(resolve.value, resolve.min), resolve.max - resolve.lethal);
+
+    // Set Reflex to 10 + Agility + Perception + Other (handle trait substitution)
+    const reflex = data.defense.reflex;
+    reflex.bonus = data.defense.reflex.bonus ? data.defense.reflex.bonus : 0;
+    const reflex_form1 = this.getTraitForName(data.traits, reflex.formula[0].active).modified_score;
+    const reflex_form2 = this.getTraitForName(data.traits, reflex.formula[1].active).modified_score;
+    reflex.formula[0].score = reflex_form1;
+    reflex.formula[1].score = reflex_form2;
+    reflex.armor = Math.max( armor,  (reflex.armorBonus ? reflex.armorBonus : 0) );
+    reflex.reflex = Math.max(0, 10 + reflex_form1 + reflex_form2 + reflex.armor + reflex.other + (reflex.bonus ? reflex.bonus : 0));
+    reflex.hint_str = `10 + ${reflex.formula[0].active} + ${reflex.formula[1].active} + armor + feats + other = ${reflex.reflex}`;
+
+    // Set Fortitude to 10 + Endurance + Might + Other (handle trait substitution)
+    const fortitude = data.defense.fortitude;
+    fortitude.bonus = data.defense.fortitude.bonus ? data.defense.fortitude.bonus : 0;
+    const fortitude_form1 = this.getTraitForName(data.traits, fortitude.formula[0].active).modified_score;
+    const fortitude_form2 = this.getTraitForName(data.traits, fortitude.formula[1].active).modified_score;
+    fortitude.formula[0].score = fortitude_form1;
+    fortitude.formula[1].score = fortitude_form2;
+    fortitude.armor = Math.max( armor,  (fortitude.armorBonus ? fortitude.armorBonus : 0) );
+    fortitude.fortitude = Math.max(0, 10 + fortitude_form1 + fortitude_form2 + fortitude.armor + fortitude.other + (fortitude.bonus ? fortitude.bonus : 0) );
+    fortitude.hint_str = `10 + ${fortitude.formula[0].active} + ${fortitude.formula[1].active} + armor + feats + other = ${fortitude.fortitude}`;
+
+    // Set Will to 10 + Presence + Volition + Other (handle trait substitution)
+    const will = data.defense.will;
+    will.bonus = data.defense.will.bonus ? data.defense.will.bonus : 0;
+    const will_form1 = this.getTraitForName(data.traits, will.formula[0].active).modified_score;
+    const will_form2 = this.getTraitForName(data.traits, will.formula[1].active).modified_score;
+    will.formula[0].score = will_form1;
+    will.formula[1].score = will_form2;
+    will.armor = Math.max( armor,  (will.armorBonus ? will.armorBonus : 0) );
+    will.will = Math.max(0, 10 + will_form1 + will_form2 + will.armor + will.other + (will.bonus ? will.bonus : 0) );
+    will.hint_str = `10 + ${will.formula[0].active} + ${will.formula[1].active} + armor + feats + other = ${will.will}`;
 
     // Calculate feat costs
     let total_feat_cost = 0;
@@ -112,36 +130,46 @@ export class olActor extends Actor {
         total_feat_cost += item.system.cost;
     });
     trackers.feats.spent = total_feat_cost;
-    trackers.feats.points = 6 + data.xp;
+    trackers.feats.points = data.trackers.chroma.points - 9;
 
     data.trackers = trackers;
-    data.attributes = attributes;
+    data.traits = traits;
     //console.log(hp)
-    data.defense.hp = hp;
-    data.defense.guard = guard;
-    data.defense.toughness = tough;
     data.defense.resolve = resolve;
+    data.defense.reflex = reflex;
+    data.defense.fortitude = fortitude;
+    data.defense.will = will;
   }
 
   _prepareNPCData(actorData) {
     const data = actorData.system;
-    data.xp = (data.level-1) * 3;
+    data.trackers.chroma.points = ((data.level - 1) * 3) + 15;
 
     let trackers = data.trackers;
-    let attributes = data.attributes;
-    trackers.attr.spent = 0;
-    trackers.attr.points = 40 + data.xp*3;
-    data.heroMusterCode = "";
-    // Loop through attribute scores, and add their dice to our sheet output.
-    for (let [attr_group_name, attr_group] of Object.entries(attributes)) {
-      for (let [attr_name, attr] of Object.entries(attr_group)) {
-        attr.modified_score = attr.score
-        data.heroMusterCode = data.heroMusterCode + String( attr.modified_score );
-        attr.bonus_class = '';
-        attr.bonus_str = '';
-        attr.dice = this.getDieForAttrScore(attr.score);
-        trackers.attr.spent += (attr.score*attr.score + attr.score)/2;
-        //console.log(attr_name, attr.score, trackers.attr.spent);
+    let traits = data.traits;
+    trackers.traits.spent = 0;
+    trackers.traits.points = 40 + ((data.trackers.chroma.points - 15) * 3);
+    // Loop through trait scores, and add their dice to our sheet output.
+    for (let [trait_group_name, trait_group] of Object.entries(traits)) {
+      for (let [trait_name, trait] of Object.entries(trait_group)) {
+        trait.modified_score = trait.score
+        trait.bonus_class = '';
+        trait.bonus_str = '';
+        trait.dice = this.getDieForTraitScore(trait.score);
+        trackers.traits.spent += (trait.score*trait.score + trait.score)/2;
+      }
+    }
+
+    let chromas = data.chroma;
+    trackers.chroma.spent = 0;
+    // Loop through chroma scores, and add their dice to our sheet output.
+    for (let [chroma_group_name, chroma_group] of Object.entries(chromas)) {
+      for (let [chroma_name, chroma] of Object.entries(chroma_group)) {
+        chroma.modified_score = chroma.score
+        chroma.bonus_class = '';
+        chroma.bonus_str = '';
+        chroma.dice = this.getDieForTraitScore(chroma.score);
+        trackers.chroma.spent += this.getCostForChromaScore(chroma.score);
       }
     }
 
@@ -152,14 +180,15 @@ export class olActor extends Actor {
         total_feat_cost += item.system.cost;
     });
     trackers.feats.spent = total_feat_cost;
-    trackers.feats.points = 6 + data.xp;
+    trackers.feats.points = data.trackers.chroma.points - 9;
 
     // Update the Actor
     data.trackers = trackers;
-    data.attributes = attributes;
+    data.traits = traits;
+    data.chroma = chromas;
   }
 
-  getDieForAttrScore(score) {
+  getDieForTraitScore( score) {
     if( score <= 0 )
       return {"str": "X", "num": 0, "die": 0};
     else if( score <= 1)
@@ -184,18 +213,43 @@ export class olActor extends Actor {
       return {"str": "4d8", "num": 4, "die": "d8"};
   }
 
-  getAttrForName(attributes, name) {
-    let attr = attributes.physical[name]
-    if( attr ) return attr;
+  getCostForChromaScore(score) {
+    if( score <= 0 )
+      return 0;
+    else if( score <= 1)
+      return 1;
+    else if( score <= 2)
+      return 3;
+    else if( score <= 3)
+      return 6;
+    else if( score <= 4)
+      return 9;
+    else if( score <= 5)
+      return 15;
+    else if( score <= 6)
+      return 18;
+    else if( score <= 7)
+      return 24;
+    else if( score <= 8)
+      return 27;
+    else if( score <= 9)
+      return 36;
+    else
+      return 36;
+  }
 
-    attr = attributes.mental[name]
-    if( attr ) return attr;
+  getTraitForName( traits, name) {
+    let trait = traits.physical[name]
+    if( trait ) return trait;
 
-    attr = attributes.social[name]
-    if( attr ) return attr;
+    trait = traits.mental[name]
+    if( trait ) return trait;
 
-    attr = attributes.extraordinary[name]
-    if( attr ) return attr;
+    trait = traits.social[name]
+    if( trait ) return trait;
+
+    trait = traits.extraordinary[name]
+    if( trait ) return trait;
 
     return null;
   }

@@ -1,17 +1,42 @@
 
-export async function rollAttr(actor, attr_name, skip_dialog=false) {
-    // Get the attribute from its name
-    const attr = _getAttr(actor, attr_name);
-    if (attr) {
-        // Generate an OLRoll for the attribute
-        let olroll = await OLRoll(attr_name, attr, 0, 0, 0, skip_dialog);
+export async function rollTrait( actor, trait_name, skip_dialog=false) {
+    // Get the trait from its name
+    const trait = _getTrait(actor, trait_name);
+    if (trait) {
+        // Generate an OLRoll for the trait
+        let olroll = await OLRoll(trait_name, trait, 0, 0, 0, skip_dialog);
         if (olroll.roll) {
             // Generate a chat message template using OLRoll data
-            const template = "systems/openlegend/templates/dialog/roll-chat.html";
+            const template = "systems/chromaverse/templates/dialog/roll-chat.html";
             const data = {
-                "name": attr_name,
+                "name": trait_name,
                 "type": 'Attribute',
-                "attr": olroll.attr,
+                "trait": olroll.trait,
+                "adv": olroll.adv
+            }
+            const html = await renderTemplate(template, data);
+            // Roll the roll
+            olroll.roll.toMessage({
+                speaker: ChatMessage.getSpeaker({ actor: actor }),
+                flavor: html
+            });
+        }
+    }
+}
+
+export async function rollChroma(actor, chroma_name, skip_dialog=false) {
+    // Get the chroma from its name
+    const chroma = _getChroma(actor, chroma_name);
+    if (chroma) {
+        // Generate an OLRoll for the chroma
+        let olroll = await OLRoll(chroma_name, chroma, 0, 0, 0, skip_dialog);
+        if (olroll.roll) {
+            // Generate a chat message template using OLRoll data
+            const template = "systems/chromaverse/templates/dialog/roll-chat.html";
+            const data = {
+                "name": chroma_name,
+                "type": 'Chroma',
+                "trait": olroll.trait,
                 "adv": olroll.adv
             }
             const html = await renderTemplate(template, data);
@@ -25,26 +50,26 @@ export async function rollAttr(actor, attr_name, skip_dialog=false) {
 }
 
 export async function rollItem(actor, item, skip_dialog=false) {
-    // If the item has a chosen action attribute...
-    const attr_name = item.system.action.attribute;
-    const attr = _getAttr(actor, attr_name);
-    if (attr) {
-        // Generate an OLRoll for the attribute
+    // If the item has a chosen action trait...
+    const trait_name = item.system.action.trait;
+    const trait = _getTrait(actor, trait_name);
+    if (trait) {
+        // Generate an OLRoll for the trait
         let advantage = Number(item.system.action.default_adv);
         let advBonus = 0;
         if( actor.system.advantageBonus && ( item.type === "attack" || item.type === "weapon" ) ){
             advantage += actor.system.advantageBonus;
             advBonus = actor.system.advantageBonus;
         }
-        let olroll = await OLRoll(attr_name, attr, advantage, advBonus, item.system.action.explosion_mod, skip_dialog);
+        let olroll = await OLRoll(trait_name, trait, advantage, advBonus, item.system.action.explosion_mod, skip_dialog);
         if (olroll.roll) {
             // Generate a chat message template using OLRoll data
-            const template = "systems/openlegend/templates/dialog/roll-chat.html";
+            const template = "systems/chromaverse/templates/dialog/roll-chat.html";
             const data = {
                 "name": item.system.action.name,
                 "type": item.type,
                 "notes": item.system.details.notes,
-                "attr": olroll.attr,
+                "trait": olroll.trait,
                 "target": item.system.action.target,
                 "adv": olroll.adv
             }
@@ -59,13 +84,13 @@ export async function rollItem(actor, item, skip_dialog=false) {
 }
 
 
-export async function OLRoll(attr_name, attr, default_adv=0, advBonus=0, explosion_modifier=0, skip_window=false) {
+export async function OLRoll(trait_name, trait, default_adv=0, advBonus=0, explosion_modifier=0, skip_window=false) {
     const to_return = {
         "roll": null,
-        "attr": {
-            "name": attr_name,
-            "score": attr.modified_score,
-            "dice": attr.dice
+        "trait": {
+            "name": trait_name,
+            "score": trait.modified_score,
+            "dice": trait.dice
         },
         "adv": {
             "type": "",
@@ -76,15 +101,15 @@ export async function OLRoll(attr_name, attr, default_adv=0, advBonus=0, explosi
     // Create the Dialog window
     let adv = default_adv
     if (!skip_window)
-        adv = await _OLRollDialog(attr_name, attr, default_adv, advBonus);
+        adv = await _OLRollDialog(trait_name, trait, default_adv, advBonus);
     if (adv == null)
         return to_return;
 
-    const dice = attr.dice;
+    const dice = trait.dice;
     const d20_explos = explosion_modifier > 0 ? `X>=${Math.max(2, 20-explosion_modifier)}` : 'X'
     // If score is zero
-    if (attr.modified_score <= 0) {
-        to_return.attr.dice = null;
+    if (trait.modified_score <= 0) {
+        to_return.trait.dice = null;
         if (adv > 0) {
             to_return.adv.type = "Advantage";
             to_return.adv.value = 1;
@@ -99,11 +124,11 @@ export async function OLRoll(attr_name, attr, default_adv=0, advBonus=0, explosi
         }
     } else {
         const die_num = parseInt(dice.die.substring(1));
-        const attr_explos = explosion_modifier > 0 ? `X>=${Math.max(2, die_num-explosion_modifier)}` : 'X';
+        const trait_explos = explosion_modifier > 0 ? `X>=${Math.max(2, die_num-explosion_modifier)}` : 'X';
         // Normal roll
         if (adv === 0) {
             to_return.adv = null;
-            to_return.roll = new Roll(`1d20${d20_explos} + ${dice.num + dice.die}${attr_explos}`);
+            to_return.roll = new Roll(`1d20${d20_explos} + ${dice.num + dice.die}${trait_explos}`);
         } else {
             to_return.adv.value = Math.abs(adv);
             let advstr = ""
@@ -114,11 +139,11 @@ export async function OLRoll(attr_name, attr, default_adv=0, advBonus=0, explosi
                 to_return.adv.type = "Advantage";
                 advstr = 'kh' + dice.num;
             }
-            to_return.roll = new Roll(`1d20${d20_explos} + ${(to_return.adv.value + dice.num) + dice.die + advstr}${attr_explos}`);
+            to_return.roll = new Roll(`1d20${d20_explos} + ${(to_return.adv.value + dice.num) + dice.die + advstr}${trait_explos}`);
         }
     }
 
-    if (game.settings.get("openlegend", "alt_d20_explosion"))
+    if (game.settings.get("chromaverse", "alt_d20_explosion"))
         to_return.roll = _modifyD20Explosion(to_return.roll, dice)
 
     return to_return;
@@ -185,11 +210,11 @@ function _modifyD20Explosion(roll, dice) {
     return roll;
 }
 
-async function _OLRollDialog(attr_name, attr, default_adv=0, advBonus=0) {
-    const template = "systems/openlegend/templates/dialog/roll-dialog.html";
-    const data = { 'attr': attr_name, 'score': attr.modified_score, 'formula': '1d20', 'default_adv': default_adv, 'advBonus': advBonus }
-    if (attr.modified_score > 0)
-        data.formula += ' + ' + attr.dice.num + attr.dice.die;
+async function _OLRollDialog(trait_name, trait, default_adv=0, advBonus=0) {
+    const template = "systems/chromaverse/templates/dialog/roll-dialog.html";
+    const data = { 'trait': trait_name, 'score': trait.modified_score, 'formula': '1d20', 'default_adv': default_adv, 'advBonus': advBonus }
+    if (trait.modified_score > 0)
+        data.formula += ' + ' + trait.dice.num + trait.dice.die;
 
     const html = await renderTemplate(template, data);
 
@@ -218,11 +243,20 @@ async function _OLRollDialog(attr_name, attr, default_adv=0, advBonus=0) {
     });
 }
 
-export function _getAttr(actor, attr_name) {
-    // Find the attribute data object using its name
-    for (const [_, attr_group] of Object.entries(actor.system.attributes)) {
-        if (attr_group[attr_name])
-            return attr_group[attr_name]
+export function _getTrait( actor, trait_name) {
+    // Find the trait data object using its name
+    for (const [_, trait_group] of Object.entries(actor.system.traits)) {
+        if (trait_group[trait_name])
+            return trait_group[trait_name]
+    }
+    return null;
+}
+
+export function _getChroma(actor, chroma_name) {
+    // Find the chroma data object using its name
+    for (const [_, chroma_group] of Object.entries(actor.system.chroma)) {
+        if (chroma_group[chroma_name])
+            return chroma_group[chroma_name]
     }
     return null;
 }

@@ -4,20 +4,22 @@
     data-item="{{item._id}}"><i class="fas fa-dice-d20"></i></a>
 <input class="action-edit" data-item="{{item._id}}" data-field="action_name" type="text" value="{{item.system.action.name}}"\>
 <div class="action-type">{{item.type}}</div>
-<select class="action-edit action-attribute" data-item="{{item._id}}" data-field="attack">
+<select class="action-edit action-trait" data-item="{{item._id}}" data-field="attack">
     <option></option>
     {{#each item.system.attacks as |attack|}}
-    <option class="action-attribute" value="{{attack.attribute}}" {{#ifeq attack.attribute ../item.system.action.attribute}} selected{{/ifeq}}>{{attack.attribute}}</option>
+    <option class="action-trait" value="{{attack.trait}}" {{#ifeq attack.trait ../item.system.action.trait}} selected{{/ifeq}}>{{attack.trait}}</option>
     {{/each}}
 </select>
 <div>vs</div>
 <div>
 {{#each item.system.attacks as |attack|}}
-    {{#ifeq attack.attribute ../item.system.action.attribute}}
+    {{#ifeq attack.trait ../item.system.action.trait}}
         {{attack.target}}
     {{/ifeq}}
 {{/each}}
 </div>
+<input class="action-edit action-ap" data-item="{{item._id}}" data-field="action_ap"
+       type="number" value="{{item.system.action.default_ap}}"/>
 <input class="action-edit action-adv" data-item="{{item._id}}" data-field="action_adv"
         type="number" value="{{item.system.action.default_adv}}"/>
 <input class="action-edit" data-item="{{item._id}}" data-field="notes"

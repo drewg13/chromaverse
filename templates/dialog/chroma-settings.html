@@ -1,0 +1,19 @@
+<form class="chromaverse">
+    <div class="form-group">
+        <div class="forceful large">Attr</div>
+        <div class="forceful large">Modifier</div>
+    </div>
+    {{#each chroma as |chroma_group group_name|}}
+    <div class="form-group">
+        <label class="forceful">{{group_name}}</label>
+    </div>
+
+    {{#each chroma_group as |chroma chroma_name|}}
+        <div class="form-group">
+            <label class="">{{chroma_name}}</label>
+            <input class="centered" name="chroma.{{group_name}}.{{chroma_name}}.bonus"
+                type="number" data-group='{{group_name}}' data-chroma='{{chroma_name}}' value="{{chroma.bonus}}" placeholder="0" />
+        </div>
+    {{/each}}
+{{/each}}
+</form>

@@ -26,13 +26,13 @@
             <span class="action-header">Attacks</span>
             <ul class="action-list">
                 {{#each system.attacks as |attack|}}
-                    <li><span class="forceful">{{attack.attribute}}</span> vs <span class="forceful">{{attack.target}}</span></li>
+                    <li><span class="forceful">{{attack.trait}}</span> vs <span class="forceful">{{attack.target}}</span></li>
                 {{/each}}
             </ul>
             <div class="action-edit" hidden>
                 <ul class="attack-list">
                     {{#each system.attacks as |attack|}}
-                        {{> "systems/openlegend/templates/item/parts/attack-target.html" attack=attack attributes=../system.attributes}}
+                        {{> "systems/chromaverse/templates/item/parts/attack-target.html" attack=attack traits=../system.traits}}
                     {{/each}}
                 </ul>
                 <div class="explosion-mod">

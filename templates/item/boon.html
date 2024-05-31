@@ -26,17 +26,17 @@
         <div>
             <span class="action-header">Attributes</span>
             <ul class="action-list">
-                {{#each system.attributes as |val attr|}}
+                {{#each system.traits as |val trait|}}
                     {{#if val}}
-                        <li class="forceful">{{attr}}</li>
+                        <li class="forceful">{{trait}}</li>
                     {{/if}}
                 {{/each}}
             </ul>
             <ul class="action-edit" hidden>
-            {{#each system.attributes as |val attr|}}
+            {{#each system.traits as |val trait|}}
             <li>
-                <input class="attr-checkbox" data-attr="{{attr}}" type="checkbox" {{#if val}}checked{{/if}}/>
-                <span>{{attr}}</span>
+                <input class="trait-checkbox" data-trait="{{trait}}" type="checkbox" {{#if val}}checked{{/if}}/>
+                <span>{{trait}}</span>
             </li>
             {{/each}}
             </ul>

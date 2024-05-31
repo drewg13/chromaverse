@@ -1,4 +1,4 @@
-import { rollAttr, rollItem } from "../util/dice.js";
+import { rollTrait, rollChroma, rollItem } from "../util/dice.js";
 import { move_action_up, move_feat_up, move_gear_up } from "./item-movement.js";
 
 /**
@@ -10,7 +10,7 @@ export class olActorSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     const options = foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["openlegend", "sheet", "actor", "character"],
+      classes: ["chromaverse", "sheet", "actor", "character"],
       width: 1200,
       height: 600,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }],
@@ -21,7 +21,7 @@ export class olActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return "systems/openlegend/templates/actor/actor-sheet.html";
+    return "systems/chromaverse/templates/actor/actor-sheet.html";
   }
 
   /* -------------------------------------------- */
@@ -38,8 +38,7 @@ export class olActorSheet extends ActorSheet {
       sheetData.actions = [];
       sheetData.gear    = [];
       sheetData.feats   = [];
-      sheetData.perks   = [];
-      sheetData.flaws   = [];
+      sheetData.virtues   = [];
     }
     actorData.items.forEach(item => {
       if (item.system.action)
@@ -48,15 +47,12 @@ export class olActorSheet extends ActorSheet {
         sheetData.gear.push(item);
       if (item.type === 'feat')
         sheetData.feats.push(item);
-      else if (item.type === 'perk')
-        sheetData.perks.push(item);
-      else if (item.type === 'flaw')
-        sheetData.flaws.push(item);
+      else if (item.type === 'virtue')
+        sheetData.virtues.push(item);
     });
     sheetData.actions.sort((a, b) => a.system.action.index - b.system.action.index);
     sheetData.gear.sort((a, b) => a.system.gear.index - b.system.gear.index);
     sheetData.feats.sort((a, b) => a.system.index - b.system.index);
-    sheetData.inCombat = this.actor.inCombat;
     sheetData.system.notes = await TextEditor.enrichHTML(sheetData.system.notes, {secrets: actorData.isOwner});
 
     return sheetData;
@@ -120,20 +116,6 @@ export class olActorSheet extends ActorSheet {
       item.delete();
     });
 
-    // HeroMuster Lookup
-    html.find('.lookup').click(ev => {
-      const tag = ev.currentTarget;
-      const type = tag.dataset.type;
-      const code = tag.dataset.code;
-      const heroURL = "https://openlegend.heromuster.com/"
-      const options = {};
-      options.height = 650;
-      options.width = 550;
-      options.resizable = true;
-      options.title = "HeroMuster " + type.charAt(0).toUpperCase() + type.substr(1).toLowerCase();
-      new FrameViewer(heroURL + type + "-" + code, options).render(true);
-    });
-
     // Update action 'items' directly
     html.find('.action-edit').change( ev => {
       const tag = ev.currentTarget;
@@ -142,15 +124,16 @@ export class olActorSheet extends ActorSheet {
       const value = tag.value;
 
       let data = foundry.utils.deepClone(item.system);
-      if( field === 'action_attr') data.action.attribute = value;
+      if( field === 'action_trait') data.action.trait = value;
       else if( field === 'action_name') data.action.name = value;
+      else if (field === 'action_ap') data.action.default_ap = value;
       else if (field === 'action_adv') data.action.default_adv = value;
       else if( field === 'notes') data.details.notes = value;
       else if( field === 'attack') {
-        // Set both attack attribute and find its target
-        data.action.attribute = value;
+        // Set both attack trait and find its target
+        data.action.trait = value;
         data.attacks.forEach(attack => {
-          if (attack.attribute === value)
+          if (attack.trait === value)
             data.action.target = attack.target;
         });
       }
@@ -158,29 +141,32 @@ export class olActorSheet extends ActorSheet {
     });
 
     // Update curr hp of npcs if max hp changes
-    html.find('.npc_hp_edit').change(ev => {
-      const hp_val = Number( $(ev.currentTarget).val() );
+    html.find('.npc_resolve_edit').change(ev => {
+      const resolve_val = Number( $(ev.currentTarget).val() );
       const data = this.actor.system;
-      const hp = data.defense.hp;
-      hp.max = hp_val;
-      hp.value = hp_val;
-      this.actor.update({ "system.defense": { hp } } );
+      const resolve = data.defense.resolve;
+      resolve.max = resolve_val;
+      resolve.value = resolve_val;
+      this.actor.update({ "system.defense": { resolve } } );
     });
 
-    html.find(".update-npc-attributes").click(ev => {
+    html.find(".update-npc-traits").click(ev => {
       const btn = $(ev.currentTarget);
       if (btn.html() === "Edit")
         btn.html("Save");
       else {
         let data = {}
-        html.find(".npc-attr-setter").each((i, obj) => {
-          data[`system.attributes.${obj.dataset.group}.${obj.dataset.attr}.score`] = parseInt(obj.value);
+        html.find(".npc-trait-setter").each((i, obj) => {
+          data[`system.traits.${obj.dataset.group}.${obj.dataset.trait}.score`] = parseInt(obj.value);
+        });
+        html.find(".npc-chroma-setter").each((i, obj) => {
+          data[`system.chroma.${obj.dataset.group}.${obj.dataset.chroma}.score`] = parseInt(obj.value);
         });
         this.actor.update(data);
         btn.html("Edit");
       }
-      html.find(".npc-attributes-display").toggle();
-      html.find(".npc-attributes-edit").toggle();
+      html.find(".npc-traits-display").toggle();
+      html.find(".npc-traits-edit").toggle();
     });
 
     // Rollable abilities.
@@ -191,7 +177,8 @@ export class olActorSheet extends ActorSheet {
 
     // Configurable settings.
     html.find('.settings').click(this._onConfigure.bind(this));
-    html.find('.attr-settings').click(this._onAttrConfigure.bind(this));
+    html.find('.trait-settings').click(this._onTraitsConfigure.bind(this));
+    html.find('.chroma-settings').click(this._onChromaConfigure.bind(this));
   }
 
   /* -------------------------------------------- */
@@ -207,11 +194,13 @@ export class olActorSheet extends ActorSheet {
     const element = event.currentTarget;
     const dataset = element.dataset;
 
-    // Roll using the appropriate logic -- item vs attribute
+    // Roll using the appropriate logic -- item vs trait
     if (dataset.item)
       rollItem(this.actor, this.actor.items.get(dataset.item), ctrl_held);
-    else if (dataset.attr)
-      rollAttr(this.actor, dataset.attr, ctrl_held);
+    else if (dataset.trait)
+      rollTrait(this.actor, dataset.trait, ctrl_held);
+    else if (dataset.chroma)
+      rollChroma(this.actor, dataset.chroma, ctrl_held);
   }
 
   /**
@@ -238,9 +227,9 @@ export class olActorSheet extends ActorSheet {
   }
 
   async _SettingsDialog(name, defense) {
-    const template = "systems/openlegend/templates/dialog/defense-settings.html";
-    const attrs = this.actor.system.attributes;
-    const data = { 'name': name, 'formula': defense.formula, 'attrs': attrs }
+    const template = "systems/chromaverse/templates/dialog/defense-settings.html";
+    const traits = this.actor.system.traits;
+    const data = { 'name': name, 'formula': defense.formula, 'traits': traits }
 
     const html = await renderTemplate(template, data);
     // Create the Dialog window
@@ -260,27 +249,44 @@ export class olActorSheet extends ActorSheet {
     });
   }
 
-  async _onAttrConfigure(event) {
+  async _onTraitsConfigure(event) {
     event.preventDefault();
     const data = this.actor.system;
-    const attrs = data.attributes;
+    const traits = data.traits;
 
-    let result = await this._AttrSettingsDialog();
+    let result = await this._TraitSettingsDialog();
     if( result ) {
       result.forEach((item, index) => {
         const dataset = item.dataset
         if (item.value !== '')
-          attrs[dataset.group][dataset.attr]['bonus'] = parseInt(item.value);
+          traits[dataset.group][dataset.trait]['bonus'] = parseInt(item.value);
       });
-      let update = { system: { attributes: attrs } };
+      let update = { system: { traits: traits } };
       await this.actor.update(update);
     }
   }
 
-  async _AttrSettingsDialog() {
-    const template = "systems/openlegend/templates/dialog/attr-settings.html";
-    const attrs = this.actor.system.attributes;
-    const data = { 'attributes': attrs }
+  async _onChromaConfigure(event) {
+    event.preventDefault();
+    const data = this.actor.system;
+    const chroma = data.chroma;
+
+    let result = await this._ChromaSettingsDialog();
+    if( result ) {
+      result.forEach((item, index) => {
+        const dataset = item.dataset
+        if (item.value !== '')
+          chroma[dataset.group][dataset.chroma]['bonus'] = parseInt(item.value);
+      });
+      let update = { system: { chroma: chroma } };
+      await this.actor.update(update);
+    }
+  }
+
+  async _TraitSettingsDialog() {
+    const template = "systems/chromaverse/templates/dialog/trait-settings.html";
+    const traits = this.actor.system.traits;
+    const data = { 'traits': traits }
 
     const html = await renderTemplate(template, data);
     // Create the Dialog window
@@ -297,6 +303,29 @@ export class olActorSheet extends ActorSheet {
             default: "update",
             close: html => resolve(null)
         }).render(true);
+    });
+  }
+
+  async _ChromaSettingsDialog() {
+    const template = "systems/chromaverse/templates/dialog/chroma-settings.html";
+    const chroma = this.actor.system.chroma;
+    const data = { 'chroma': chroma }
+
+    const html = await renderTemplate(template, data);
+    // Create the Dialog window
+    return new Promise(resolve => {
+      new Dialog({
+        title: data.name,
+        content: html,
+        buttons: {
+          update: {
+            label: "Update",
+            callback: html => resolve(html[0].querySelectorAll("input"))
+          }
+        },
+        default: "update",
+        close: html => resolve(null)
+      }).render(true);
     });
   }
 

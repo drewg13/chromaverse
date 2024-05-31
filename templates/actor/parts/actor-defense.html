@@ -1,69 +1,79 @@
 <div class="health">
-    <div class="health-title">Health Points</div>
+    <div class="health-title">Resolve</div>
     <div class="health-type">Curr</div>
     <div class="health-type">Max</div>
     <div class="health-type">Lethal</div>
-    <input name="system.defense.hp.value" type="number" data-dtype="Number" value="{{system.defense.hp.value}}" placeholder="0" />
+    <input name="system.defense.resolve.value" type="number" data-dtype="Number" value="{{system.defense.resolve.value}}" placeholder="0" />
     <div class="ht">
-        <input name="system.defense.hp.max" type="number" data-dtype="Number" data-tooltip="{{system.defense.hp.hint_str}}" value="{{system.defense.hp.max}}" placeholder="0" disabled>
+        <input name="system.defense.resolve.max" type="number" data-dtype="Number" data-tooltip="{{system.defense.resolve.hint_str}}" value="{{system.defense.resolve.max}}" placeholder="0" disabled>
     </div>
-    <input name="system.defense.hp.lethal" type="number" data-dtype="Number" value="{{system.defense.hp.lethal}}" placeholder="0" />
+    <input name="system.defense.resolve.lethal" type="number" data-dtype="Number" value="{{system.defense.resolve.lethal}}" placeholder="0" />
     <div class="health-bonuses">
         <div class="text-input">
             <label>Feat Bonus: </label>
-            <input name="system.defense.hp.feat" type="number" data-dtype="Number" value="{{system.defense.hp.feat}}" placeholder="0" />
+            <div class="resolve-bonus">{{system.defense.resolve.bonus}}</div>
         </div>
         <div class="text-input">
             <label>Other Bonus: </label>
-            <input name="system.defense.hp.other" type="number" data-dtype="Number" value="{{system.defense.hp.other}}" placeholder="0" />
+            <input name="system.defense.resolve.other" type="number" data-dtype="Number" value="{{system.defense.resolve.other}}" placeholder="0" />
         </div>
     </div>
-    <i class="fas fa-cog settings clickable" data-name="Health Configuration" data-defense="hp"></i>
+    <i class="fas fa-cog settings clickable" data-name="Health Configuration" data-defense="resolve"></i>
 </div>
-<div class="guard defense-grid">
+<div class="reflex defense-grid">
     <div>
-        <div class="defense-title">Guard</div>
-        <div class="defense-value" data-tooltip="{{system.defense.guard.hint_str}}">{{system.defense.guard.guard}}</div>
+        <div class="defense-title">Reflex</div>
+        <div class="defense-value" data-tooltip="{{system.defense.reflex.hint_str}}">{{system.defense.reflex.reflex}}</div>
     </div>
-    <div class="attribute-grid">
-        {{#each system.defense.guard.formula as |formula|}}
+    <div class="trait-grid">
+        {{#each system.defense.reflex.formula as |formula|}}
             <div class="capitalize">{{formula.active}}</div>
             <div class="capitalize">{{formula.score}}</div>
         {{/each}}
         <div>Armor</div>
-        <div{{#if system.defense.guard.armorBonus}} class="upgraded" data-tooltip="From Activated Feats"{{/if}}>{{system.defense.guard.armor}}</div>
+        <div class="capitalize">{{system.defense.reflex.armor}}</div>
+        <div>Feats</div>
+        <div class="capitalize">{{system.defense.reflex.bonus}}</div>
         <div>Other</div>
-        <input name="system.defense.guard.other" type="number" data-dtype="Number" value="{{system.defense.guard.other}}" placeholder="0" />
+        <input name="system.defense.reflex.other" type="number" data-dtype="Number" value="{{system.defense.reflex.other}}" placeholder="0" />
     </div>
-    <i class="fas fa-cog settings clickable" data-name="Guard Configuration" data-defense="guard"></i>
+    <i class="fas fa-cog settings clickable" data-name="Reflex Configuration" data-defense="reflex"></i>
 </div>
-<div class="toughness defense-grid">
+<div class="fortitude defense-grid">
     <div>
-        <div class="defense-title">Tough</div>
-        <div class="defense-value" data-tooltip="{{system.defense.toughness.hint_str}}">{{system.defense.toughness.toughness}} {{#if system.defense.toughness.bonus}}<span class="upgraded bonus" data-tooltip="From Activated Feats">(+{{system.defense.toughness.bonus}})</span>{{/if}}</div>
+        <div class="defense-title">Fortitude</div>
+        <div class="defense-value" data-tooltip="{{system.defense.fortitude.hint_str}}">{{system.defense.fortitude.fortitude}}</div>
     </div>
-    <div class="attribute-grid">
-        {{#each system.defense.toughness.formula as |formula|}}
+    <div class="trait-grid">
+        {{#each system.defense.fortitude.formula as |formula|}}
             <div class="capitalize">{{formula.active}}</div>
             <div class="capitalize">{{formula.score}}</div>
         {{/each}}
+        <div>Armor</div>
+        <div class="capitalize">{{system.defense.fortitude.armor}}</div>
+        <div>Feats</div>
+        <div class="capitalize">{{system.defense.fortitude.bonus}}</div>
         <div>Other</div>
-        <input name="system.defense.toughness.other" type="number" data-dtype="Number" value="{{system.defense.toughness.other}}" placeholder="0" />
+        <input name="system.defense.fortitude.other" type="number" data-dtype="Number" value="{{system.defense.fortitude.other}}" placeholder="0" />
     </div>
-    <i class="fas fa-cog settings clickable" data-name="Toughness Configuration" data-defense="toughness"></i>
+    <i class="fas fa-cog settings clickable" data-name="Toughness Configuration" data-defense="fortitude"></i>
 </div>
-<div class="resolve defense-grid">
+<div class="will defense-grid">
     <div>
-        <div class="defense-title">Resolve</div>
-        <div class="defense-value" data-tooltip="{{system.defense.resolve.hint_str}}">{{system.defense.resolve.resolve}} {{#if system.defense.resolve.bonus}}<span class="upgraded bonus" data-tooltip="From Activated Feats">(+{{system.defense.resolve.bonus}})</span>{{/if}}</div>
+        <div class="defense-title">Will</div>
+        <div class="defense-value" data-tooltip="{{system.defense.will.hint_str}}">{{system.defense.will.will}}</div>
     </div>
-    <div class="attribute-grid">
-        {{#each system.defense.resolve.formula as |formula|}}
+    <div class="trait-grid">
+        {{#each system.defense.will.formula as |formula|}}
             <div class="capitalize">{{formula.active}}</div>
             <div class="capitalize">{{formula.score}}</div>
         {{/each}}
+        <div>Armor</div>
+        <div class="capitalize">{{system.defense.will.armor}}</div>
+        <div>Feats</div>
+        <div class="capitalize">{{system.defense.will.bonus}}</div>
         <div>Other</div>
-        <input name="system.defense.resolve.other" type="number" data-dtype="Number" value="{{system.defense.resolve.other}}" placeholder="0" />
+        <input name="system.defense.will.other" type="number" data-dtype="Number" value="{{system.defense.will.other}}" placeholder="0" />
     </div>
-    <i class="fas fa-cog settings clickable" data-name="Resolve Configuration" data-defense="resolve"></i>
+    <i class="fas fa-cog settings clickable" data-name="Resolve Configuration" data-defense="will"></i>
 </div>

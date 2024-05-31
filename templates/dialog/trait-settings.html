@@ -1,0 +1,19 @@
+<form class="chromaverse">
+    <div class="form-group">
+        <div class="forceful large">Attr</div>
+        <div class="forceful large">Modifier</div>
+    </div>
+    {{#each traits as |trait_group group_name|}}
+    <div class="form-group">
+        <label class="forceful">{{group_name}}</label>
+    </div>
+
+    {{#each trait_group as |trait trait_name|}}
+        <div class="form-group">
+            <label class="">{{trait_name}}</label>
+            <input class="centered" name="traits.{{group_name}}.{{trait_name}}.bonus"
+                type="number" data-group='{{group_name}}' data-trait='{{trait_name}}' value="{{trait.bonus}}" placeholder="0" />
+        </div>
+    {{/each}}
+{{/each}}
+</form>

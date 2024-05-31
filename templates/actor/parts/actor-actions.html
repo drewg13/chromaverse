@@ -2,22 +2,15 @@
     <div class="action-title">
         Actions
         <span class="button add-asset clickable" data-type="attack"><i class="fas fa-plus"></i> Attack</span>
-        {{#if inCombat}}
-            <label class="toggle-switch" data-tooltip="Interrupt Action Used?">
-                <input type="checkbox" name="system.defendUsed" data-dtype="Boolean" {{checked system.defendUsed}}>
-                <span class="toggle-slider round"></span>
-            </label>
-            {{#if system.majorUnavailable}}
-                <span class="action-warning">Major Action Unavailable</span>
-            {{/if}}
-        {{/if}}
     </div>
+    <div></div>
     <div></div>
     <div class="action-header">Name</div>
     <div class="action-header">Type</div>
     <div class="action-header">Attribute</div>
-    <div class="action-header"></div>
+    <div></div>
     <div class="action-header">Target</div>
+    <div class="action-header">AP</div>
     <div class="action-header">Adv</div>
     <div class="action-header">Notes</div>
     <div></div>
@@ -25,20 +18,20 @@
     <div></div>
     {{#each actions as |item|}}
         {{#ifeq item.type 'boon'}}
-            {{> "systems/openlegend/templates/actor/parts/action-boon.html" item=item}}
+            {{> "systems/chromaverse/templates/actor/parts/action-boon.html" item=item}}
         {{/ifeq}}
         {{#ifeq item.type 'bane'}}
-            {{> "systems/openlegend/templates/actor/parts/action-attack.html" item=item}}
+            {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
         {{/ifeq}}
         {{#ifeq item.type 'attack'}}
-            {{> "systems/openlegend/templates/actor/parts/action-attack.html" item=item}}
+            {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
         {{/ifeq}}
         {{#if item.system.action.show_as_action}}
             {{#ifeq item.type 'weapon'}}
-                {{> "systems/openlegend/templates/actor/parts/action-attack.html" item=item}}
+                {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
             {{/ifeq}}
             {{#ifeq item.type 'generic'}}
-                {{> "systems/openlegend/templates/actor/parts/action-attack.html" item=item}}
+                {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
             {{/ifeq}}
         {{/if}}
     {{/each}}

@@ -1,48 +1,53 @@
-import { rollAttr, rollItem } from "../util/dice.js";
+import { rollTrait, rollChroma, rollItem } from "../util/dice.js";
 
-const attr_imgs = {
+const trait_imgs = {
     //Physical
-    "agility": "modules/game-icons-net/blackbackground/body-balance.svg",
-    "fortitude": "modules/game-icons-net/blackbackground/health-normal.svg",
-    "might": "modules/game-icons-net/blackbackground/mighty-force.svg",
+    "agility": "systems/chromaverse/icons/blackbackground/body-balance.svg",
+    "finesse": "systems/chromaverse/icons/blackbackground/fencer.svg",
+    "endurance": "systems/chromaverse/icons/blackbackground/health-normal.svg",
+    "might": "systems/chromaverse/icons/blackbackground/mighty-force.svg",
     //Mental
-    "learning": "modules/game-icons-net/blackbackground/archive-research.svg",
-    "logic": "modules/game-icons-net/blackbackground/logic-gate-xor.svg",
-    "perception": "modules/game-icons-net/blackbackground/semi-closed-eye.svg",
-    "will": "modules/game-icons-net/blackbackground/brain.svg",
+    "knowledge": "systems/chromaverse/icons/blackbackground/archive-research.svg",
+    "logic": "systems/chromaverse/icons/blackbackground/logic-gate-xor.svg",
+    "perception": "systems/chromaverse/icons/blackbackground/semi-closed-eye.svg",
+    "volition": "systems/chromaverse/icons/blackbackground/brain.svg",
     //Social
-    "deception": "modules/game-icons-net/blackbackground/diamonds-smile.svg",
-    "persuasion": "modules/game-icons-net/blackbackground/convince.svg",
-    "presence": "modules/game-icons-net/blackbackground/public-speaker.svg",
-    //Extraordinary
-    "alteration": "modules/game-icons-net/blackbackground/card-exchange.svg",
-    "creation": "modules/game-icons-net/blackbackground/anvil-impact.svg",
-    "energy": "modules/game-icons-net/blackbackground/rolling-energy.svg",
-    "entropy": "modules/game-icons-net/blackbackground/poison.svg",
-    "influence": "modules/game-icons-net/blackbackground/retro-controller.svg",
-    "movement": "modules/game-icons-net/blackbackground/move.svg",
-    "prescience": "modules/game-icons-net/blackbackground/crystal-ball.svg",
-    "protection": "modules/game-icons-net/blackbackground/protection-glasses.svg"
+    "deception": "systems/chromaverse/icons/blackbackground/diamonds-smile.svg",
+    "persuasion": "systems/chromaverse/icons/blackbackground/convince.svg",
+    "empathy": "systems/chromaverse/icons/blackbackground/lovers.svg",
+    "presence": "systems/chromaverse/icons/blackbackground/public-speaker.svg"
 };
 
 /* -------------------------------------------- */
 /*  Hotbar Macros                               */
 /* -------------------------------------------- */
 export async function createOLMacro(data, slot) {
-    if (data.macro === 'attr') {
-        const command = `game.openlegend.macros.rollAttrMacro("${data.actor}", "${data.attr}")`;
-        let macro = game.macros.contents.find(m => m.command === command);
-        if (!macro) {
-            macro = await Macro.create({
-                name: _capitalize(data.attr),
+    if (data.macro === 'trait') {
+        const command = `game.chromaverse.macros.rollTraitMacro("${ data.actor }", "${ data.trait }")`;
+        let macro = game.macros.contents.find( m => m.command === command );
+        if( !macro ) {
+            macro = await Macro.create( {
+                name: _capitalize( data.trait ),
                 type: "script",
-                img: attr_imgs[data.attr],
+                img: trait_imgs[data.trait],
                 command: command
-            });
+            } );
         }
-        game.user.assignHotbarMacro(macro, slot);
+        game.user.assignHotbarMacro( macro, slot );
+    } else if (data.macro === 'chroma') {
+            const command = `game.chromaverse.macros.rollChromaMacro("${data.actor}", "${data.chroma}")`;
+            let macro = game.macros.contents.find(m => m.command === command);
+            if (!macro) {
+                macro = await Macro.create({
+                    name: _capitalize(data.chroma),
+                    type: "script",
+                    img: "systems/chromaverse/icons/chroma/"+data.chroma+".webp",
+                    command: command
+                });
+            }
+            game.user.assignHotbarMacro(macro, slot);
     } else if (data.macro === 'item') {
-        const command = `game.openlegend.macros.rollItemMacro("${data.actor}", "${data.item}")`;
+        const command = `game.chromaverse.macros.rollItemMacro("${data.actor}", "${data.item}")`;
         let macro = game.macros.contents.find(m => m.command === command);
         if (!macro) {
             const actor = await fromUuid(data.actor);
@@ -60,9 +65,14 @@ export async function createOLMacro(data, slot) {
 }
 
 /* -------------------------------------------- */
-export async function rollAttrMacro(actor_id, attr_name) {
+export async function rollTraitMacro(actor_id, trait_name) {
     const actor = await fromUuid(actor_id);
-    rollAttr(actor, attr_name);
+    rollTrait(actor, trait_name);
+}
+
+export async function rollChromaMacro(actor_id, chroma_name) {
+    const actor = await fromUuid(actor_id);
+    rollChroma(actor, chroma_name);
 }
 
 export async function rollItemMacro(actor_id, item_id) {

@@ -1,0 +1,36 @@
+<div class='trait-group'>
+    <i class="fas fa-cog trait-settings clickable" data-name="Trait Configuration"></i>
+    <div class="traits">
+        {{#each system.traits as |trait_group group_name|}}
+            <div class="trait-header">{{group_name}}</div>
+            <div></div>
+            <div class="centered">Score</div>
+            <div class="centered">Dice</div>
+            {{#each trait_group as |trait trait_name|}}
+                <div class="trait-name rollable macro {{trait.bonus_class}}" draggable="true"
+                        data-macro="trait" data-trait="{{trait_name}}">{{trait.bonus_str}} {{trait_name}}</div>
+                <input class="centered" name="system.traits.{{group_name}}.{{trait_name}}.score"
+                        type="number" data-dtype="Number" value="{{trait.score}}" placeholder="0" />
+                <div class="trait-value">{{trait.dice.str}}</div>
+            {{/each}}
+        {{/each}}
+    </div>
+    <i class="fas fa-cog chroma-settings clickable" data-name="Chroma Configuration"></i>
+    <div class="chroma">
+        {{#each system.chroma as |chroma_group group_name|}}
+            <div class="chroma-header">{{group_name}}</div>
+            <div></div>
+            <div></div>
+            <div class="centered">Score</div>
+            <div class="centered">Dice</div>
+            {{#each chroma_group as |chroma chroma_name|}}
+                <div class="trait-name rollable macro {{chroma.bonus_class}}" draggable="true"
+                     data-macro="chroma" data-chroma="{{chroma_name}}">{{chroma.bonus_str}} {{chroma_name}}</div>
+                <img src="systems/chromaverse/icons/chroma/{{chroma_name}}.webp" width="20" height="20">
+                <input class="centered" name="system.chroma.{{group_name}}.{{chroma_name}}.score"
+                       type="number" data-dtype="Number" value="{{chroma.score}}" placeholder="0" />
+                <div class="trait-value">{{chroma.dice.str}}</div>
+            {{/each}}
+        {{/each}}
+    </div>
+</div>

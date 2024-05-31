@@ -18,25 +18,25 @@
                 </div>
             </div>
             <div class="npc-row text-input">
-                <label>Description:</label>
-                <input name="system.description" type="text" value="{{system.description}}" placeholder="" />
+                <label>Archetype:</label>
+                <input name="system.description" type="text" value="{{system.archetype}}" placeholder="" />
             </div>
             <div class="npc-row flexrow">
                 <div class="text-input npc-hp">
-                    <label>MaxHP:</label>
-                    <input class="double_digit npc_hp_edit" type="number" data-dtype="Number" value="{{system.defense.hp.max}}" />
+                    <label>Resolve Max:</label>
+                    <input class="double_digit npc_resolve_edit" type="number" data-dtype="Number" value="{{system.defense.resolve.max}}" />
                 </div>
                 <div class="text-input npc-defense">
-                    <label>Guard:</label>
-                    <input class="double_digit" name="system.defense.guard.guard" type="number" data-dtype="Number" value="{{system.defense.guard.guard}}" />
+                    <label>Reflex:</label>
+                    <input class="double_digit" name="system.defense.reflex.reflex" type="number" data-dtype="Number" value="{{system.defense.reflex.reflex}}" />
                 </div>
                 <div class="text-input npc-defense">
-                    <label>Tough:</label>
-                    <input class="double_digit" name="system.defense.toughness.toughness" type="number" data-dtype="Number" value="{{system.defense.toughness.toughness}}" />
+                    <label>Fortitude:</label>
+                    <input class="double_digit" name="system.defense.fortitude.fortitude" type="number" data-dtype="Number" value="{{system.defense.fortitude.fortitude}}" />
                 </div>
                 <div class="text-input npc-defense">
-                    <label>Resolve:</label>
-                    <input class="double_digit" name="system.defense.resolve.resolve" type="number" data-dtype="Number" value="{{system.defense.resolve.resolve}}" />
+                    <label>Will:</label>
+                    <input class="double_digit" name="system.defense.will.will" type="number" data-dtype="Number" value="{{system.defense.will.will}}" />
                 </div>
             </div>
             <div class="npc-row flexrow">
@@ -53,56 +53,77 @@
                     <input class="double_digit" name="system.speed" type="number" data-dtype="Number" value="{{system.speed}}" placeholder="30" />
                 </div>
                 <div class="text-input">
-                    <label>Attr:</label>
-                    <label>{{system.trackers.attr.spent}}/{{system.trackers.attr.points}}</label>
+                    <label>Chroma Points:</label>
+                    <label>{{system.trackers.chroma.spent}}/{{system.trackers.chroma.points}}</label>
                 </div>
                 <div class="text-input">
-                    <label>Feats:</label>
+                    <label>Trait Points:</label>
+                    <label>{{system.trackers.traits.spent}}/{{system.trackers.traits.points}}</label>
+                </div>
+                <div class="text-input">
+                    <label>Feat Points:</label>
                     <label>{{system.trackers.feats.spent}}/{{system.trackers.feats.points}}</label>
                 </div>
             </div>
         </div>
     </div>
     <div class="npc-body">
-        <div class="npc-attributes">
-            <div class="npc-attributes-display">
-                {{#each system.attributes as |group|}}
-                    {{#each group as |attr attr_name|}}
-                        {{#if (gtz attr.score)}}
+        <div class="npc-traits">
+            <div class="npc-traits-display">
+                {{#each system.traits as |group|}}
+                    {{#each group as |trait trait_name|}}
+                        {{#if (gtz trait.score)}}
                         <div>
                             <span class="forceful rollable macro" draggable="true"
-                                data-macro="attr" data-attr="{{attr_name}}">{{attr_name}}:</span>
-                            {{attr.score}}
+                                data-macro="trait" data-trait="{{trait_name}}">{{trait_name}}:</span>
+                            {{trait.score}}
                         </div>
                         {{/if}}
                     {{/each}}
                 {{/each}}
+                {{#each system.chroma as |group|}}
+                    {{#each group as |chroma chroma_name|}}
+                        {{#if (gtz chroma.score)}}
+                            <div>
+                            <span class="forceful rollable macro" draggable="true"
+                                  data-macro="chroma" data-chroma="{{chroma_name}}">{{chroma_name}}:</span>
+                                {{chroma.score}}
+                            </div>
+                        {{/if}}
+                    {{/each}}
+                {{/each}}
             </div>
-            <div class="npc-attributes-edit" hidden>
-                {{#each system.attributes as |group group_name|}}
-                    {{#each group as |attr attr_name|}}
+            <div class="npc-traits-edit" hidden>
+                {{#each system.traits as |group group_name|}}
+                    {{#each group as |trait trait_name|}}
                         <div>
-                            <span class="forceful">{{attr_name}}:</span>
-                            <input class="single_digit npc-attr-setter"
+                            <span class="forceful">{{trait_name}}:</span>
+                            <input class="single_digit npc-trait-setter"
                                 type="number"
                                 data-group="{{group_name}}"
-                                data-attr="{{attr_name}}"
-                                value="{{attr.score}}" />
+                                data-trait="{{trait_name}}"
+                                value="{{trait.score}}" />
+                        </div>
+                    {{/each}}
+                {{/each}}
+                {{#each system.chroma as |group group_name|}}
+                    {{#each group as |chroma chroma_name|}}
+                        <div>
+                            <span class="forceful">{{chroma_name}}:</span>
+                            <input class="single_digit npc-chroma-setter"
+                                   type="number"
+                                   data-group="{{group_name}}"
+                                   data-chroma="{{chroma_name}}"
+                                   value="{{chroma.score}}" />
                         </div>
                     {{/each}}
                 {{/each}}
             </div>
-            <button class="update-npc-attributes">Edit</button>
-            <div class="heromuster npc">
-                <div class="attribute-header">HeroMuster Lookups</div>
-                <button type="button" class="lookup" data-type="boons" data-code="{{system.heroMusterCode}}">Boons</button>
-                <button type="button" class="lookup" data-type="banes" data-code="{{system.heroMusterCode}}">Banes</button>
-                <button type="button" class="lookup" data-type="feats" data-code="{{system.heroMusterCode}}">Feats</button>
-            </div>
+            <button class="update-npc-traits">Edit</button>
         </div>
         <div class="npc-features">
             <div class="npc-actions">
-                {{> "systems/openlegend/templates/actor/parts/actor-actions.html"}}
+                {{> "systems/chromaverse/templates/actor/parts/actor-actions.html"}}
             </div>
             <div class="npc-feats">
                 <div class="title">
@@ -110,7 +131,7 @@
                     <span class="button add-asset clickable" data-type="feat"><i class="fas fa-plus"></i> Feat</span>
                 </div>
                 {{#each feats as |item|}}
-                    {{> "systems/openlegend/templates/actor/parts/gear-feat.html" feat=item}}
+                    {{> "systems/chromaverse/templates/actor/parts/gear-feat.html" feat=item}}
                 {{/each}}
             </div>
         </div>

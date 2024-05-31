@@ -2,21 +2,44 @@
   "Actor": {
     "types": ["character", "npc"],
     "templates": {
+      "chroma": {
+        "chroma": {
+          "chroma": {
+            "red": { "score": 0 },
+            "orange": { "score": 0 },
+            "yellow": { "score": 0 },
+            "blue": { "score": 0 },
+            "green": { "score": 0 },
+            "violet": { "score": 0 }
+          }
+        }
+      },
+      "personality": {
+        "personality": {
+          "attitude": "",
+          "beliefs": "",
+          "connections": "",
+          "drive": ""
+        }
+      },
       "details": {
-        "description": "",
+        "archetype": "",
         "player": "",
         "level": 1,
-        "xp": 0,
-        "wl": 2,
-        "lp": 1,
+        "funds": 2,
+        "vigor": 1,
         "speed": 30,
         "notes": ""
       },
       "base": {
         "trackers": {
-          "attr": {
+          "traits": {
             "spent": 0,
             "points": 40
+          },
+          "chroma": {
+            "spent": 0,
+            "points": 15
           },
           "feats": {
             "spent": 0,
@@ -24,85 +47,73 @@
           }
         },
         "defense": {
-          "hp": {
+          "resolve": {
             "value": 10,
             "min": 0,
             "max": 10,
             "lethal": 0,
             "formula": [
-              {"default": "fortitude", "active": "fortitude"},
-              {"default": "will", "active": "will"},
+              {"default": "endurance", "active": "endurance"},
+              {"default": "volition", "active": "volition"},
               {"default": "presence", "active": "presence"}
             ]
           },
-          "guard": {
-            "guard": 10,
-            "armor": 0,
+          "fortitude": {
             "other": 0,
             "formula": [
-              {"default": "agility", "active": "agility"},
+              {"default": "endurance", "active": "endurance"},
               {"default": "might", "active": "might"}
             ]
           },
-          "toughness": {
-            "toughness": 10,
+          "reflex": {
             "other": 0,
             "formula": [
-              {"default": "fortitude", "active": "fortitude"},
-              {"default": "will", "active": "will"}
+              {"default": "agility", "active": "agility"},
+              {"default": "perception", "active": "perception"}
             ]
           },
-          "resolve": {
-            "resolve": 10,
+          "will": {
             "other": 0,
             "formula": [
-              {"default": "presence", "active": "presence"},
-              {"default": "will", "active": "will"}
+              {"default": "volition", "active": "volition"},
+              {"default": "presence", "active": "presence"}
             ]
           }
         },
-        "attributes": {
+        "traits": {
           "physical": {
             "agility": { "score": 0 },
-            "fortitude": { "score": 0 },
-            "might": { "score": 0 }
+            "finesse": { "score": 0 },
+            "might": { "score": 0 },
+            "endurance": { "score": 0 }
           },
           "mental": {
-            "learning": { "score": 0 },
+            "knowledge": { "score": 0 },
             "logic": { "score": 0 },
             "perception": { "score": 0 },
-            "will": { "score": 0 }
+            "volition": { "score": 0 }
           },
           "social": {
             "deception": { "score": 0 },
             "persuasion": { "score": 0 },
+            "empathy": { "score": 0 },
             "presence": { "score": 0 }
-          },
-          "extraordinary": {
-            "alteration": { "score": 0 },
-            "creation": { "score": 0 },
-            "energy": { "score": 0 },
-            "entropy": { "score": 0 },
-            "influence": { "score": 0 },
-            "movement": { "score": 0 },
-            "prescience": { "score": 0 },
-            "protection": { "score": 0 }
           }
         },
         "initiative_mod": 0
       }
     },
     "character": {
-      "templates": ["base", "details"],
+      "templates": ["base", "details", "personality", "chroma"],
       "biography": ""
     },
     "npc": {
-      "templates": ["base", "details"],
+      "templates": ["base", "details", "chroma"],
       "boss_edge": 0
     }
   },
   "Item": {
-    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "perk", "flaw", "attack"],
+    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "virtue", "attack"],
     "templates": {
       "flavor": {
         "details": {
@@ -112,23 +123,23 @@
         }
       },
       "core": {
-        "attributes": {
-          "agility": false, "fortitude": false, "might": false,
-          "learning": false, "logic": false, "perception": false, "will": false,
-          "deception": false, "persuasion": false, "presence": false,
-          "alteration": false, "creation": false, "energy": false, "entropy": false,
-          "influence": false, "movement": false, "prescience": false, "protection": false
+        "traits": {
+          "agility": false, "finesse": false, "might": false, "endurance": false,
+          "knowledge": false, "logic": false, "perception": false, "volition": false,
+          "deception": false, "persuasion": false, "empathy": false, "presence": false,
+          "red": false, "orange": false, "yellow": false, "blue": false, "green": false, "violet": false
         }
       },
       "actionable": {
         "action": {
           "name": "",
-          "attribute": "",
+          "trait": "",
           "cast_time": "",
           "target": "",
           "default_adv": 0,
           "explosion_mod": 0,
           "index": 0,
+          "default_ap": 0,
           "show_as_action": true
         }
       },
@@ -140,7 +151,7 @@
       "gear": {
         "gear": {
           "index": 0,
-          "wl": 0
+          "funds": 0
         }
       }
     },
@@ -183,10 +194,7 @@
       "prerequisites": "",
       "index": 0
     },
-    "perk": {
-      "templates": ["flavor"]
-    },
-    "flaw": {
+    "virtue": {
       "templates": ["flavor"]
     },
     "attack": {

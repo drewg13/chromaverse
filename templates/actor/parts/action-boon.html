@@ -1,16 +1,18 @@
 <a class="rollable macro" data-macro="item" data-name="{{item.name}}" title="Roll" data-item="{{item._id}}"><i class="fas fa-dice-d20"></i></a>
 <input class="action-edit" data-item="{{item._id}}" data-field="action_name" type="text" value="{{item.system.action.name}}"/>
 <div class="action-type">{{item.type}}</div>
-<select class="action-edit action-attribute" data-item="{{item._id}}" data-field="action_attr">
+<select class="action-edit action-trait" data-item="{{item._id}}" data-field="action_trait">
     <option></option>
-    {{#each item.system.attributes as |val attr|}}
+    {{#each item.system.traits as |val trait|}}
     {{#if val}}
-    <option class="action-attribute" value="{{attr}}" {{#ifeq attr ../item.system.action.attribute}} selected{{/ifeq}}>{{attr}}</option>
+    <option class="action-trait" value="{{trait}}" {{#ifeq trait ../item.system.action.trait}} selected{{/ifeq}}>{{trait}}</option>
     {{/if}}
     {{/each}}
 </select>
 <div>vs</div>
 <div>PL: {{item.system.action.target}}</div>
+<input class="action-edit action-ap" data-item="{{item._id}}" data-field="action_ap"
+       type="number" value="{{item.system.action.default_ap}}"/>
 <input class="action-edit action-adv" data-item="{{item._id}}" data-field="action_adv"
         type="number" value="{{item.system.action.default_adv}}"/>
 <input class="action-edit" data-item="{{item._id}}" data-field="notes"

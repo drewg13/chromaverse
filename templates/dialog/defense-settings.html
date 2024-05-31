@@ -1,4 +1,4 @@
-<form class="openlegend">
+<form class="chromaverse">
     <div class="form-group">
         <div class="forceful large">Default Attr</div>
         <div class="forceful large">Modified Attr</div>
@@ -6,10 +6,10 @@
     {{#each formula as |field|}}
     <div class="form-group">
         <label>{{field.default}}</label>
-        <select class="capitalize">        
-        {{#each ../attrs as |attr_group group_name|}}
-            {{#each attr_group as |attr attr_name|}}
-                <option class="capitalize" value="{{attr_name}}" {{#ifeq attr_name field.active}} selected{{/ifeq}}>{{attr_name}}</option>
+        <select class="capitalize">
+        {{#each ../traits as |trait_group group_name|}}
+            {{#each trait_group as |trait trait_name|}}
+                <option class="capitalize" value="{{trait_name}}" {{#ifeq trait_name field.active}} selected{{/ifeq}}>{{trait_name}}</option>
             {{/each}}
         {{/each}}
         </select>

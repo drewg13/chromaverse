@@ -52,7 +52,17 @@ export async function rollChroma(actor, chroma_name, skip_dialog=false) {
 export async function rollItem(actor, item, skip_dialog=false) {
     // If the item has a chosen action trait...
     const trait_name = item.system.action.trait;
-    const trait = _getTrait(actor, trait_name);
+    let traits = [];
+    Object.keys( actor.system.traits ).forEach( t => { Object.keys( actor.system.traits[t] ).forEach( a => { traits.push( a ) } ) } );
+    let chroma = Object.keys( actor.system.chroma.chroma );
+    let trait;
+    if( traits.includes( trait_name ) ){
+        trait = _getTrait(actor, trait_name);
+    } else if ( chroma.includes( trait_name ) ){
+        trait = _getChroma(actor, trait_name);
+    } else {
+        console.warn(trait_name + " not present in actor system data")
+    }
     if (trait) {
         // Generate an OLRoll for the trait
         let advantage = Number(item.system.action.default_adv);

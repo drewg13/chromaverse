@@ -11,7 +11,7 @@
           <span class="button add-asset clickable" data-type="generic"><i class="fas fa-plus"></i> Generic</span>
           <span class="button add-asset clickable" data-type="armor"><i class="fas fa-plus"></i> Armor</span>
           <span class="button add-asset clickable" data-type="weapon"><i class="fas fa-plus"></i> Weapon</span>
-          <span class="button add-asset clickable" data-type="item"><i class="fas fa-plus"></i> Item</span>
+          <span class="button add-asset clickable" data-type="focus"><i class="fas fa-plus"></i> Focus</span>
         </div>
         {{#each gear as |item|}}
           {{#ifeq item.type 'weapon'}}
@@ -23,8 +23,8 @@
           {{#ifeq item.type 'generic'}}
             {{> "systems/chromaverse/templates/actor/parts/gear-generic.html" item=item}}
           {{/ifeq}}
-          {{#ifeq item.type 'item'}}
-            {{> "systems/chromaverse/templates/actor/parts/gear-item.html" item=item}}
+          {{#ifeq item.type 'focus'}}
+            {{> "systems/chromaverse/templates/actor/parts/gear-focus.html" item=item}}
           {{/ifeq}}
         {{/each}}
       </div>

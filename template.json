@@ -113,7 +113,7 @@
     }
   },
   "Item": {
-    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "perk", "item", "attack"],
+    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "perk", "focus", "attack"],
     "templates": {
       "flavor": {
         "details": {
@@ -170,7 +170,7 @@
       "properties": "",
       "banes": ""
     },
-    "item": {
+    "focus": {
       "templates": ["flavor", "core", "actionable", "gear"],
       "attacks": [],
       "source": ""

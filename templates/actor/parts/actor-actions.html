@@ -33,6 +33,9 @@
             {{#ifeq item.type 'generic'}}
                 {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
             {{/ifeq}}
+            {{#ifeq item.type 'focus'}}
+                {{> "systems/chromaverse/templates/actor/parts/action-attack.html" item=item}}
+            {{/ifeq}}
         {{/if}}
     {{/each}}
 </div>

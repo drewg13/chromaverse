@@ -1,0 +1,54 @@
+<form class="{{cssClass}} item-sheet" autocomplete="off">
+    <header class="header flexrow">
+        <img class="item-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-details">
+            <div class="flexrow">
+                <h1 class="item-name">
+                    <input name="name" type="text" value="{{name}}" placeholder="Name"/>
+                </h1>
+
+                <div class="item-subtitle">
+                    <h4 class="item-type">{{type}}</h4>
+                    <span class="scale-tester" hidden></span>
+                    <input class="item-status scale" name="system.source"
+                            type="text" value="{{system.source}}" placeholder="Source"/>
+                </div>
+            </div>
+            <ul class="summary flexrow">
+                <li class="shrink">Funds:
+                    <input class="wl" type="text" name="system.gear.funds" value="{{system.gear.funds}}" placeholder="?"/></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="sheet-body">
+        <div>
+            <span class="action-header">Attacks</span>
+            <ul class="action-list">
+                {{#each system.attacks as |attack|}}
+                    <li><span class="forceful">{{attack.trait}}</span> vs <span class="forceful">{{attack.target}}</span></li>
+                {{/each}}
+            </ul>
+            <div class="action-edit" hidden>
+                <ul class="attack-list">
+                    {{#each system.attacks as |attack|}}
+                        {{> "systems/chromaverse/templates/item/parts/attack-target.html" attack=attack traits=../system.traits}}
+                    {{/each}}
+                </ul>
+                <div class="explosion-mod">
+                    <label class="forceful">Explode on max minus:</label>
+                    <input type="number" name="system.action.explosion_mod" value="{{system.action.explosion_mod}}"/>
+                </div>
+                <button class="add-attack">Add</button>
+            </div>
+            <button class="update-action">Edit</button>
+            <div class="flexrow aligned">
+                <span class="forceful shrink">Show action:</span>
+                <input type="checkbox" name="system.action.show_as_action" {{#if system.action.show_as_action}}checked{{/if}}/>
+            </div>
+        </div>
+        <div class="description-editor">
+            {{editor system.details.description target="system.details.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>

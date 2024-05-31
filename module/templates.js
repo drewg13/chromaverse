@@ -16,7 +16,7 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/chromaverse/templates/actor/parts/gear-armor.html",
       "systems/chromaverse/templates/actor/parts/gear-generic.html",
       "systems/chromaverse/templates/actor/parts/gear-feat.html",
-      "systems/chromaverse/templates/actor/parts/gear-virtue.html",
+      "systems/chromaverse/templates/actor/parts/gear-perk.html",
 
       // Item Sheet Partials
       "systems/chromaverse/templates/item/parts/attack-target.html"

@@ -74,10 +74,10 @@
       "private": false
     },
     {
-      "name": "virtues",
-      "label": "Virtues",
+      "name": "perks",
+      "label": "Perks",
       "system": "chromaverse",
-      "path": "./packs/virtues",
+      "path": "./packs/perks",
       "type": "Item",
       "private": false
     },
@@ -119,8 +119,8 @@
   "download": "#{DOWNLOAD}#",
   "protected": false,
   "grid": {
-    "distance": 5,
-    "units": "ft"
+    "distance": 1,
+    "units": "square"
   },
   "primaryTokenAttribute": "defense.resolve",
   "flags": {

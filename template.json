@@ -28,7 +28,7 @@
         "level": 1,
         "funds": 2,
         "vigor": 1,
-        "speed": 30,
+        "speed": 6,
         "notes": ""
       },
       "base": {
@@ -113,7 +113,7 @@
     }
   },
   "Item": {
-    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "virtue", "attack"],
+    "types": ["boon", "bane", "weapon", "armor", "generic", "feat", "perk", "item", "attack"],
     "templates": {
       "flavor": {
         "details": {
@@ -170,11 +170,18 @@
       "properties": "",
       "banes": ""
     },
+    "item": {
+      "templates": ["flavor", "core", "actionable", "gear"],
+      "attacks": [],
+      "source": ""
+    },
     "armor": {
       "templates": ["flavor", "gear"],
       "type": "",
-      "req_fort": 0,
-      "defense": 0,
+      "req_end": 0,
+      "r_defense": 0,
+      "f_defense": 0,
+      "w_defense": 0,
       "speed_penalty": 0,
       "equipped": true
     },
@@ -194,7 +201,7 @@
       "prerequisites": "",
       "index": 0
     },
-    "virtue": {
+    "perk": {
       "templates": ["flavor"]
     },
     "attack": {

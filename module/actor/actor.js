@@ -69,11 +69,16 @@ export class olActor extends Actor {
     }
 
     const endur = data.traits.physical.endurance.modified_score;
-    let armor= 0;
+    let r_armor= 0;
+    let f_armor= 0;
+    let w_armor= 0;
     actorData.items.forEach(item => {
       if (item.type === 'armor') {
-        if (item.system.equipped && endur >= item.system.req_fort)
-          armor += item.system.defense;
+        if (item.system.equipped && endur >= item.system.req_end) {
+          r_armor += item.system.r_defense;
+          f_armor += item.system.f_defense;
+          w_armor += item.system.w_defense;
+        }
       }
     });
 
@@ -97,7 +102,7 @@ export class olActor extends Actor {
     const reflex_form2 = this.getTraitForName(data.traits, reflex.formula[1].active).modified_score;
     reflex.formula[0].score = reflex_form1;
     reflex.formula[1].score = reflex_form2;
-    reflex.armor = Math.max( armor,  (reflex.armorBonus ? reflex.armorBonus : 0) );
+    reflex.armor = Math.max( r_armor,  (reflex.armorBonus ? reflex.armorBonus : 0) );
     reflex.reflex = Math.max(0, 10 + reflex_form1 + reflex_form2 + reflex.armor + reflex.other + (reflex.bonus ? reflex.bonus : 0));
     reflex.hint_str = `10 + ${reflex.formula[0].active} + ${reflex.formula[1].active} + armor + feats + other = ${reflex.reflex}`;
 
@@ -108,7 +113,7 @@ export class olActor extends Actor {
     const fortitude_form2 = this.getTraitForName(data.traits, fortitude.formula[1].active).modified_score;
     fortitude.formula[0].score = fortitude_form1;
     fortitude.formula[1].score = fortitude_form2;
-    fortitude.armor = Math.max( armor,  (fortitude.armorBonus ? fortitude.armorBonus : 0) );
+    fortitude.armor = Math.max( f_armor,  (fortitude.armorBonus ? fortitude.armorBonus : 0) );
     fortitude.fortitude = Math.max(0, 10 + fortitude_form1 + fortitude_form2 + fortitude.armor + fortitude.other + (fortitude.bonus ? fortitude.bonus : 0) );
     fortitude.hint_str = `10 + ${fortitude.formula[0].active} + ${fortitude.formula[1].active} + armor + feats + other = ${fortitude.fortitude}`;
 
@@ -119,7 +124,7 @@ export class olActor extends Actor {
     const will_form2 = this.getTraitForName(data.traits, will.formula[1].active).modified_score;
     will.formula[0].score = will_form1;
     will.formula[1].score = will_form2;
-    will.armor = Math.max( armor,  (will.armorBonus ? will.armorBonus : 0) );
+    will.armor = Math.max( w_armor,  (will.armorBonus ? will.armorBonus : 0) );
     will.will = Math.max(0, 10 + will_form1 + will_form2 + will.armor + will.other + (will.bonus ? will.bonus : 0) );
     will.hint_str = `10 + ${will.formula[0].active} + ${will.formula[1].active} + armor + feats + other = ${will.will}`;
 

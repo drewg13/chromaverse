@@ -38,7 +38,7 @@ export class olActorSheet extends ActorSheet {
       sheetData.actions = [];
       sheetData.gear    = [];
       sheetData.feats   = [];
-      sheetData.virtues   = [];
+      sheetData.perks   = [];
     }
     actorData.items.forEach(item => {
       if (item.system.action)
@@ -47,8 +47,8 @@ export class olActorSheet extends ActorSheet {
         sheetData.gear.push(item);
       if (item.type === 'feat')
         sheetData.feats.push(item);
-      else if (item.type === 'virtue')
-        sheetData.virtues.push(item);
+      else if (item.type === 'perk')
+        sheetData.perks.push(item);
     });
     sheetData.actions.sort((a, b) => a.system.action.index - b.system.action.index);
     sheetData.gear.sort((a, b) => a.system.gear.index - b.system.gear.index);

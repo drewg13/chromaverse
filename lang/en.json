@@ -10,8 +10,8 @@
       "bane": "Bane",
       "boon": "Boon",
       "feat": "Feat",
-      "flaw": "Flaw",
       "generic": "Generic",
+      "item": "Item",
       "perk": "Perk",
       "weapon": "Weapon"
     }

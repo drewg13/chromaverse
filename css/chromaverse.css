@@ -389,7 +389,7 @@
   font-weight: bold;
 }
 
-.chromaverse .character .virtues {
+.chromaverse .character .perks {
   grid-column: 2/3;
   grid-row: 1/2;
   border: 4px groove #eeede0;
@@ -403,7 +403,7 @@
   background: rgba(256, 256, 256, 1);
 }
 
-.chromaverse .character .virtues .title, .chromaverse .character .personality .title {
+.chromaverse .character .perks .title, .chromaverse .character .personality .title {
   font-size: large;
   font-weight: bold;
 }
@@ -496,13 +496,19 @@
 
 .chromaverse .defense-grid .trait-grid {
   display: inline-grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 60px auto;
   grid-template-rows: 20px 20px 20px minmax(0px, 20px);
   grid-gap: 0.25rem;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   text-align: center;
+}
+
+.chromaverse .defense-grid .trait-grid input {
+  height: 18px;
+  width: 30px;
+  margin-left: 3.5px;
 }
 
 .chromaverse .defense-title {
@@ -643,12 +649,19 @@
 
 .chromaverse .armor-row {
   display: grid;
-  grid-template-columns: minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, 10fr) -webkit-max-content 20px;
-  grid-template-columns: minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, 10fr) max-content 20px;
+  grid-template-columns: minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, 10fr) -webkit-max-content 20px;
+  grid-template-columns: minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, 10fr) max-content 20px;
   grid-gap: 0.5rem;
 }
 
 .chromaverse .weapon-row {
+  display: grid;
+  grid-template-columns: minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, 10fr) -webkit-max-content 20px;
+  grid-template-columns: minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, 10fr) max-content 20px;
+  grid-gap: 0.5rem;
+}
+
+.chromaverse .item-row {
   display: grid;
   grid-template-columns: minmax(-webkit-max-content, auto) minmax(-webkit-max-content, auto) minmax(-webkit-max-content, 10fr) -webkit-max-content 20px;
   grid-template-columns: minmax(max-content, auto) minmax(max-content, auto) minmax(max-content, 10fr) max-content 20px;
@@ -1010,7 +1023,7 @@
 }
 
 .chromaverse .item-sheet .summary li input {
-  margin: 5px;
+  //** margin: 5px; **//
 }
 
 .chromaverse .item-sheet .summary li:last-child {

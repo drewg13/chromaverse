@@ -11,6 +11,7 @@
           <span class="button add-asset clickable" data-type="generic"><i class="fas fa-plus"></i> Generic</span>
           <span class="button add-asset clickable" data-type="armor"><i class="fas fa-plus"></i> Armor</span>
           <span class="button add-asset clickable" data-type="weapon"><i class="fas fa-plus"></i> Weapon</span>
+          <span class="button add-asset clickable" data-type="item"><i class="fas fa-plus"></i> Item</span>
         </div>
         {{#each gear as |item|}}
           {{#ifeq item.type 'weapon'}}
@@ -21,6 +22,9 @@
           {{/ifeq}}
           {{#ifeq item.type 'generic'}}
             {{> "systems/chromaverse/templates/actor/parts/gear-generic.html" item=item}}
+          {{/ifeq}}
+          {{#ifeq item.type 'item'}}
+            {{> "systems/chromaverse/templates/actor/parts/gear-item.html" item=item}}
           {{/ifeq}}
         {{/each}}
       </div>
@@ -33,13 +37,13 @@
           {{> "systems/chromaverse/templates/actor/parts/gear-feat.html" feat=item}}
         {{/each}}
       </div>
-      <div class="virtues">
+      <div class="perks">
         <div class="title">
-          Virtues
-          <span class="button add-asset clickable" data-type="virtue"><i class="fas fa-plus"></i> Virtue</span>
+          Perks
+          <span class="button add-asset clickable" data-type="perk"><i class="fas fa-plus"></i> Perk</span>
         </div>
-        {{#each virtues as |item|}}
-          {{> "systems/chromaverse/templates/actor/parts/gear-virtue.html" virtue=item}}
+        {{#each perk as |item|}}
+          {{> "systems/chromaverse/templates/actor/parts/gear-perk.html" perk=item}}
         {{/each}}
       </div>
       <div class="personality">

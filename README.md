@@ -3,15 +3,14 @@
   <img alt="GitHub downloads (latest)" src="https://img.shields.io/github/downloads/drewg13/chromaverse/latest/system.zip">
 </p>
 
-# Chromaverse for Foundry VTT
+# Chroma Legends for Foundry VTT
 
-An implementation of the Chromaverse system, based on the Open Legend RPG system, for Foundry Virtual Tabletop (http://foundryvtt.com).
+An implementation of the Chroma Legends system, based on the Open Legend RPG system, for Foundry Virtual Tabletop (http://foundryvtt.com).
 
 ## Installation
 
 Open the latest release, copy the link to the associated `system.json` file, and paste it into the Manifest field in the System installation window in Foundry v11 or higher.  Updates should work normally from then on.
 
-The system will also available via the official Foundry package browser at some future date.
 
 ## Features
 
@@ -19,11 +18,11 @@ The system will also available via the official Foundry package browser at some 
   * Drag and drop Boons, Banes, Feats, Perks, Armors, and Weapons onto the sheet
 * Drag and drop Macro support
   * Drag any rollable onto the macro bar for easy macros
-* Compendiums for Boons, Banes, Feats, Perks, Flaws, Weapons, and Armor
+* Compendiums for Boons, Banes, Feats, Perks, Foci, Weapons, and Armor
 
 ## Attribution
 
-Created at the request of Modstin, creator of Chromaverse
+Created at the request of Modstin, creator of Chroma Legends
 * Chromaverse: https://chromaverse.net/
 * Open Legend RPG: https://openlegendrpg.com/
 * Foundry VTT: https://foundryvtt.com/

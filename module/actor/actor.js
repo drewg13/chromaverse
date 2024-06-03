@@ -135,7 +135,7 @@ export class olActor extends Actor {
         total_feat_cost += item.system.cost;
     });
     trackers.feats.spent = total_feat_cost;
-    trackers.feats.points = data.trackers.chroma.points - 9;
+    trackers.feats.points = data.trackers.chroma.points - 6;
 
     data.trackers = trackers;
     data.traits = traits;

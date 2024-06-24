@@ -34,18 +34,18 @@
   ],
   "packs": [
     {
-      "name": "banes",
-      "label": "Banes",
+      "name": "armor",
+      "label": "Armor",
       "system": "chromaverse",
-      "path": "./packs/banes",
+      "path": "./packs/armor",
       "type": "Item",
       "private": false
     },
     {
-      "name": "basic",
-      "label": "Basic",
+      "name": "banes",
+      "label": "Banes",
       "system": "chromaverse",
-      "path": "./packs/basic",
+      "path": "./packs/banes",
       "type": "Item",
       "private": false
     },
@@ -58,18 +58,58 @@
       "private": false
     },
     {
-      "name": "feats",
-      "label": "Feats",
+      "name": "feats-combat",
+      "label": "Feats - Combat",
       "system": "chromaverse",
-      "path": "./packs/feats",
+      "path": "./packs/feats-combat",
       "type": "Item",
       "private": false
     },
     {
-      "name": "gm-feats",
-      "label": "GM-Feats",
+      "name": "feats-exploration",
+      "label": "Feats - Exploration",
       "system": "chromaverse",
-      "path": "./packs/gm-feats",
+      "path": "./packs/feats-exploration",
+      "type": "Item",
+      "private": false
+    },
+    {
+      "name": "feats-flaws",
+      "label": "Feats - Flaws",
+      "system": "chromaverse",
+      "path": "./packs/feats-flaws",
+      "type": "Item",
+      "private": false
+    },
+    {
+      "name": "feats-general",
+      "label": "Feats - General",
+      "system": "chromaverse",
+      "path": "./packs/feats-general",
+      "type": "Item",
+      "private": false
+    },
+    {
+      "name": "feats-social",
+      "label": "Feats - Social",
+      "system": "chromaverse",
+      "path": "./packs/feats-social",
+      "type": "Item",
+      "private": false
+    },
+    {
+      "name": "foci",
+      "label": "Foci",
+      "system": "chromaverse",
+      "path": "./packs/foci",
+      "type": "Item",
+      "private": false
+    },
+    {
+      "name": "melee-weapons",
+      "label": "Melee Weapons",
+      "system": "chromaverse",
+      "path": "./packs/melee-weapons",
       "type": "Item",
       "private": false
     },
@@ -82,36 +122,45 @@
       "private": false
     },
     {
-      "name": "rules",
-      "label": "Rules",
+      "name": "ranged-weapons",
+      "label": "Ranged Weapons",
       "system": "chromaverse",
-      "path": "./packs/rules",
-      "type": "JournalEntry",
-      "private": false
-    },
-    {
-      "name": "weapons",
-      "label": "Weapons",
-      "system": "chromaverse",
-      "path": "./packs/weapons",
+      "path": "./packs/ranged-weapons",
       "type": "Item",
       "private": false
     },
     {
-      "name": "armor",
-      "label": "Armor",
+      "name": "shields",
+      "label": "Shields",
       "system": "chromaverse",
-      "path": "./packs/armor",
+      "path": "./packs/shields",
       "type": "Item",
       "private": false
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Feats",
+      "sorting": "m",
+      "color": "#3b2524",
+      "packs": [
+        "feats-combat",
+        "feats-exploration",
+        "feats-flaws",
+        "feats-general",
+        "feats-social"
+      ]
     },
     {
-      "name": "gm-screen",
-      "label": "GM-Screen",
-      "system": "chromaverse",
-      "path": "./packs/gm-screen",
-      "type": "JournalEntry",
-      "private": false
+      "name": "Gear",
+      "sorting": "m",
+      "color": "#3b2524",
+      "packs": [
+        "armor",
+        "melee-weapons",
+        "ranged-weapons",
+        "shields"
+      ]
     }
   ],
   "socket": false,

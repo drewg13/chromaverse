@@ -46,6 +46,10 @@
             "points": 6
           }
         },
+        "actionPoints": {
+          "value": 5,
+          "max": 5
+        },
         "defense": {
           "resolve": {
             "value": 10,

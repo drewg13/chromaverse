@@ -102,7 +102,7 @@ Hooks.once("ready", async function() {
     return 0;
   });
 
-  CONFIG.specialStatusEffects = {DEFEATED: 'dead', INVISIBLE: 'concealment', BLIND: 'blinded'};
+  CONFIG.specialStatusEffects = {DEFEATED: 'dead', INVISIBLE: 'concealment', BLIND: 'blinded', BURROW:'burrowing', FLY:'flight', HOVER:'incorporeal'};
 
   Hooks.on("combatStart", (combat, updateData) => {
     combat.combatants.forEach( c => {

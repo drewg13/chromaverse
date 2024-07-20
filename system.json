@@ -172,6 +172,7 @@
     "units": "square"
   },
   "primaryTokenAttribute": "defense.resolve",
+  "secondaryTokenAttribute": "actionPoints",
   "flags": {
     "hotReload": {
       "extensions": ["css", "html", "json", "js", "hbs"],

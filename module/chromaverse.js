@@ -109,8 +109,8 @@ Hooks.once("ready", async function() {
       let tokenActor = combat.scene.tokens.get( c.tokenId )?.actor;
       let linkedActor = game.actors.get( c.actorId );
       let actor = tokenActor?.actorLink ? linkedActor : tokenActor;
-      // reset flags to default for beginning of combat
-      actor.update( { "system": { "defendUsed": false, "majorUnavailable": false } } )
+      // reset Action Points to max for beginning of combat
+      actor.update( { "system": { "actionPoints.value": actor.system.actionPoints.max } } )
     } )
   });
 
@@ -119,42 +119,25 @@ Hooks.once("ready", async function() {
       let tokenActor = combat.scene.tokens.get( c.tokenId )?.actor;
       let linkedActor = game.actors.get( c.actorId );
       let actor = tokenActor?.actorLink ? linkedActor : tokenActor;
-      // reset flags to default at end of combat
-      actor.update( { "system": { "defendUsed": false, "majorUnavailable": false } } );
-    } )
-  });
-
-  Hooks.on("deleteCombat", (combat, options, userId) => {
-    combat.combatants.forEach( c => {
-      let tokenActor = combat.scene.tokens.get( c.tokenId )?.actor;
-      let linkedActor = game.actors.get( c.actorId );
-      let actor = tokenActor?.actorLink ? linkedActor : tokenActor;
-      // ensure that combatant sheets re-render, if open, to ensure controls removed
-      actor.sheet.render(false);
+      // reset Action Points to max at end of combat
+      actor.update( { "system": { "actionPoints.value": actor.system.actionPoints.max } } )
     } )
   });
 
   Hooks.on("updateCombat", async (combat, updateData, updateOptions) => {
-    // get actor for current combatant, check for defendUsed, reset to false for start of turn
+    // get actor for current combatant
     let tokenActor = combat.scene.tokens.get( combat.combatant?.tokenId )?.actor;
     let linkedActor = game.actors.get( combat.combatant?.actorId );
     let actor = tokenActor?.actorLink ? linkedActor : tokenActor;
 
-    if( actor?.system.defendUsed ) {
-      await actor.update( { "system.defendUsed": false } )
-    }
-
-    // get actor for previous combatant, check for majorUnavailable, reset to false for end of turn
+    // get actor for previous combatant, reset Action Points for end of turn
     let prevTokenActor = combat.scene.tokens.get( combat.previous?.tokenId )?.actor;
     let prevLinkedActor = combat.combatants.get( combat.previous?.combatantId )?.actor;
     let prevActor = prevTokenActor?.actorLink ? prevLinkedActor : prevTokenActor;
 
-    if( prevActor?.system.majorUnavailable ) {
-      await prevActor.update( { "system.majorUnavailable": false } )
+    if( prevActor ) {
+      await prevActor.update( { "system": { "actionPoints.value": actor.system.actionPoints.max } } )
     }
-
-    // set majorUnavailable at end of turn for next turn, if defendUsed was set this turn
-    if ( prevActor?.system.defendUsed ){ await prevActor.update( { "system.majorUnavailable": true } ) }
 
   });
 });

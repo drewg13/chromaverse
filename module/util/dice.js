@@ -49,9 +49,13 @@ export async function rollChroma(actor, chroma_name, skip_dialog=false) {
     }
 }
 
-export async function rollItem(actor, item, skip_dialog=false) {
+export async function rollItem(token, actor, item, skip_dialog=false) {
     // If the item has a chosen action trait...
     const trait_name = item.system.action.trait;
+    if( !trait_name ){
+        ui.notifications.warn( "Please choose an Attribute for this item" );
+        return;
+    }
     let traits = [];
     Object.keys( actor.system.traits ).forEach( t => { Object.keys( actor.system.traits[t] ).forEach( a => { traits.push( a ) } ) } );
     let chroma = Object.keys( actor.system.chroma.chroma );
@@ -87,7 +91,10 @@ export async function rollItem(actor, item, skip_dialog=false) {
             // Roll the roll
             olroll.roll.toMessage({
                 speaker: ChatMessage.getSpeaker({ actor: actor }),
-                flavor: html
+                flavor: html,
+                flags: {
+                    itemId: item.id
+                }
             });
         }
     }

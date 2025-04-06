@@ -45,6 +45,8 @@ export class olActor extends Actor {
     let chroma = data.chroma;
     trackers.traits.spent = 0;
     trackers.traits.points = 40 + ((data.trackers.chroma.points - 15) * 3);
+    trackers.perks.spent = 0;
+    trackers.perks.points = 5;
 
     // Loop through trait scores, and add their dice to our sheet output.
     for (let [trait_group_name, trait_group] of Object.entries(traits)) {
@@ -137,6 +139,15 @@ export class olActor extends Actor {
     trackers.feats.spent = total_feat_cost;
     trackers.feats.points = data.trackers.chroma.points - 6;
 
+    // Calculate perk costs
+    let total_perks_cost = 0;
+    actorData.items.forEach(item => {
+      if (item.type === 'perk')
+        total_perks_cost += item.system.slots;
+    });
+    trackers.perks.spent = total_perks_cost;
+    trackers.perks.points = 5;
+console.log(trackers);
     data.trackers = trackers;
     data.traits = traits;
     //console.log(hp)

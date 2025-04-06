@@ -44,6 +44,10 @@
           "feats": {
             "spent": 0,
             "points": 6
+          },
+          "perks": {
+            "spent": 0,
+            "points": 5
           }
         },
         "actionPoints": {
@@ -206,7 +210,8 @@
       "index": 0
     },
     "perk": {
-      "templates": ["flavor"]
+      "templates": ["flavor"],
+      "slots": 0
     },
     "attack": {
       "templates": ["flavor", "core", "actionable"],

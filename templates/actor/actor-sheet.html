@@ -41,6 +41,10 @@
         <div class="title">
           Perks
           <span class="button add-asset clickable" data-type="perk"><i class="fas fa-plus"></i> Perk</span>
+          <span class="details-perks-points">
+            <label>Slots:</label>
+            <label>{{system.trackers.perks.spent}} / {{system.trackers.perks.points}}</label>
+          </span>
         </div>
         {{#each perks as |item|}}
           {{> "systems/chromaverse/templates/actor/parts/gear-perk.html" perk=item}}

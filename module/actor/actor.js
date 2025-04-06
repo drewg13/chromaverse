@@ -147,7 +147,7 @@ export class olActor extends Actor {
     });
     trackers.perks.spent = total_perks_cost;
     trackers.perks.points = 5;
-console.log(trackers);
+
     data.trackers = trackers;
     data.traits = traits;
     //console.log(hp)

@@ -49,7 +49,7 @@ export async function rollChroma(actor, chroma_name, skip_dialog=false) {
     }
 }
 
-export async function rollItem(token, actor, item, skip_dialog=false) {
+export async function rollItem(actor, item, skip_dialog=false) {
     // If the item has a chosen action trait...
     const trait_name = item.system.action.trait;
     if( !trait_name ){

@@ -42,6 +42,14 @@
       "private": false
     },
     {
+      "name": "attacks",
+      "label": "Attacks",
+      "system": "chromaverse",
+      "path": "./packs/attacks",
+      "type": "Item",
+      "private": false
+    },
+    {
       "name": "banes",
       "label": "Banes",
       "system": "chromaverse",

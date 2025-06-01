@@ -16,7 +16,8 @@
   "version": "#{VERSION}#",
   "compatibility": {
     "minimum": 11,
-    "verified": 12.325
+    "verified": 13.334,
+    "maximum": 13
   },
   "scripts": [],
   "esmodules": [
@@ -106,6 +107,14 @@
       "private": false
     },
     {
+      "name": "feats-foes",
+      "label": "Feats - Foes",
+      "system": "chromaverse",
+      "path": "./packs/feats-foes",
+      "type": "Item",
+      "private": false
+    },
+    {
       "name": "foci",
       "label": "Foci",
       "system": "chromaverse",
@@ -138,6 +147,30 @@
       "private": false
     },
     {
+      "name": "action-point-macros",
+      "label": "Action Point Macros",
+      "system": "chromaverse",
+      "path": "./packs/action-point-macros",
+      "type": "Macro",
+      "private": false
+    },
+    {
+      "name": "rules-references",
+      "label": "Rules References",
+      "system": "chromaverse",
+      "path": "./packs/rules-references",
+      "type": "JournalEntry",
+      "private": false
+    },
+    {
+      "name": "feats-social",
+      "label": "Feats - Social",
+      "system": "chromaverse",
+      "path": "./packs/feats-social",
+      "type": "Item",
+      "private": false
+    },
+    {
       "name": "shields",
       "label": "Shields",
       "system": "chromaverse",
@@ -156,7 +189,8 @@
         "feats-exploration",
         "feats-flaws",
         "feats-general",
-        "feats-social"
+        "feats-social",
+        "feats-foes"
       ]
     },
     {

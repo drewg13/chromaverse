@@ -163,14 +163,6 @@
       "private": false
     },
     {
-      "name": "feats-social",
-      "label": "Feats - Social",
-      "system": "chromaverse",
-      "path": "./packs/feats-social",
-      "type": "Item",
-      "private": false
-    },
-    {
       "name": "shields",
       "label": "Shields",
       "system": "chromaverse",
